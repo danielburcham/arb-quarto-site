@@ -1,0 +1,15 @@
+---
+title: "About"
+format:
+    html
+---
+
+Throughout much of the western U.S., trees are closely associated with people and communities, and, to create shelter or beauty, tree planting is one of the most common ways people in the region improve their surroundings. In fact, J. Sterling Morton proposed a new holiday celebrating trees after moving to the Nebraska prairie and missing the natural forest cover of his earlier home, and our annual Arbor Day traditions emerged from his appreciation renewed on the Great Plains. At the arboretum, we celebrate and support a strong tradition of tree stewardship in the west, and we foster the relationship between people and trees to address challenges and create a stronger future. 
+
+## Vision
+
+We envision a future with people and trees thriving in healthy, sustainable communities throughout the Great Plains and Rocky Mountains.
+
+## Mission
+
+We inspire and equip people to appreciate and steward trees adapted to the harsh conditions of landscapes throughout Colorado and surrounding areas. We fulfill our purpose through education, research, and sustainable gardening in a landscape dedicated to people and trees. 

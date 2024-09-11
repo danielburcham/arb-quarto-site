@@ -1,0 +1,57 @@
+project:
+  type: website
+
+  preview: 
+    port: 4200
+    browser: true
+    watch-inputs: true
+    navigate: true
+  
+  render:
+    - "*.qmd"
+    - "*.md"
+    
+format:
+  html:
+    theme: litera
+
+website:
+  title: "Western Discovery Arboretum"
+  description: ""
+  site-url: https://arbwest.colostate.edu
+  repo-url: https://github.com/danielburcham/arb-quarto-site
+  
+  google-analytics: ""
+  
+  open-graph:
+    locale: en_US
+
+  navbar:
+    left:
+      - text: "Discover"
+        menu: 
+          - text: "About"
+            href: discover/about/index.qmd
+          - text: "History"
+            href: discover/history/index.qmd
+      - text: "Visit"
+        href: visit/index.qmd
+      - text: "Learn"
+        menu:
+          - text: "Education Programs"
+            href: learn/classes/index/qmd
+          - text: "Explore our trees"
+            href: learn/explore-our-trees/index.qmd
+      - text: "Support"
+        menu: 
+          - text: "Volunteer"
+            href: support/volunteer/index.qmd
+          - text: "Give"
+            href: support/give/index.qmd
+    right:
+      - text: "Contact"
+        href: contact/index.qmd
+    
+  search:
+    location: navbar
+    type: textbox

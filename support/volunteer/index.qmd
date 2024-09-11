@@ -1,0 +1,20 @@
+---
+title: Volunteer
+format:
+    html
+form:
+    action: "/action.js"
+    method: GET
+    submit: "Submit"
+    fields: 
+    - name: Name
+      type: text
+      id: textField1
+      label: "Full Name"
+    - name: Email
+      type: email
+      id: textField2
+      label: "E-mail Address"
+---
+
+{{< form >}}

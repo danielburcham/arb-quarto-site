@@ -1,0 +1,50 @@
+---
+title: "Visit"
+format:
+    html
+---
+
+Whether you're coming to take a stroll, rest under a leafy canopy, or discover the beauty of trees, you are welcome to explore the arboretum on the main campus of Colorado State University. Explore our trees using the interactive map, take one of our tree tours, or sit and relax under a leafy canopy. 
+
+## Hours
+
+The arboretum is free and open during daylight hours every day. 
+
+## Directions to the Arboretum
+
+As shown in the map below, the arboretum is located on CSU's main campus next to the football practice fields. For directions to the arboretum, enter your starting address in the first box (labeled A). 
+
+```{=html}
+<script src='https://api.mapbox.com/mapbox-gl-js/v3.5.1/mapbox-gl.js'></script>
+<link href='https://api.mapbox.com/mapbox-gl-js/v3.5.1/mapbox-gl.css' rel='stylesheet' />
+
+<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.3.1/mapbox-gl-directions.js"></script>
+<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.3.1/mapbox-gl-directions.css" type="text/css">
+
+<div id='map' style='width: 100%; height: 500px;'></div>
+<script>
+mapboxgl.accessToken = 'pk.eyJ1IjoiZGFuaWVsYnVyY2hhbSIsImEiOiJjbGw2dnUxanowa2Y2M2RxcHI0eDdxbXI4In0.cDBf50sVbJdgbPJFHAYOnQ';
+
+const map = new mapboxgl.Map({
+	container: 'map', // container ID
+	style: 'mapbox://styles/mapbox/streets-v12', // style URL
+	center: [-105.092, 40.570], // starting position [lng, lat]
+	zoom: 16.5, // starting zoom
+});
+
+var directions = new MapboxDirections({
+        accessToken: mapboxgl.accessToken
+    });
+
+map.addControl(directions,'top-left');
+
+map.on('load',  function() {
+    directions.setDestination([-105.092, 40.570]);
+})
+
+</script>
+```
+
+## Parking
+
+If you're visiting during the evenings (after 4:00 pm), weekends, or university holidays, you can park next to the arboretum in Lot 240 at 851 W Pitkin St. Unfortunately, there is no visitor parking inside the arboretum. The campus parking lots around the arboretum require paid permits, and the parking rules are enforced 7:30 a.m. to 4:00 p.m. during weekdays throughout the entire year, except for official university holidays. If you're visiting during enforcement hours, hourly parking is available in Lot 585 at 615 W Lake St. 

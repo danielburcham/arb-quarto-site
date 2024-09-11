@@ -1,0 +1,19 @@
+---
+title: "Event Registration"
+form:
+    action: "/action.js"
+    method: GET
+    submit: "Submit"
+    fields: 
+    - name: Name
+      type: text
+      id: textField1
+      label: "Name"
+    - name: Email
+      type: email
+      id: textField2
+      label: "E-mail address"
+
+---
+
+{{< form >}}

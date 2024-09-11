@@ -1,0 +1,13 @@
+---
+title: "Explore our Trees"
+format:
+    html
+---
+
+## Tree Explorer Map
+
+Using our interactive map, you can easily explore the arboretum's tree collection. With the search bar, you can search for plants by their names or accession numbers, and you can find more information about each plant by clicking on the green markers. On the bottom of the page, you can also view more details about multiple trees in the expandable table. 
+
+```{=html}
+<style>.embed-container {position: relative; padding-bottom: 80%; height: 0; max-width: 100%;} .embed-container iframe, .embed-container object, .embed-container iframe{position: absolute; top: 0; left: 0; width: 100%; height: 100%;} small{position: absolute; z-index: 40; bottom: 0; margin-bottom: -15px;}</style><div class="embed-container"><iframe height="900" frameborder="0" scrolling="yes" marginheight="0" marginwidth="0"  src="//arcg.is/1yzvz00"></iframe></div>
+```
