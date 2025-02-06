@@ -1,0 +1,18 @@
+---
+title: "Contact"
+format: 
+    html
+---
+
+[Daniel Burcham](mailto:daniel.burcham@colostate.edu), Arboretum Director  
+[Sarah Wilhelm](mailto:sarah.j.wilhelm@colostate.edu), Arboretum Volunteer Coordinator
+
+### Physical Address
+**Discovery Arboretum**  
+800 W Lake St  
+Fort Collins, CO 80523
+
+### Mailing Address
+200 W Lake St  
+1173 Campus Delivery  
+Fort Collins, CO 80523

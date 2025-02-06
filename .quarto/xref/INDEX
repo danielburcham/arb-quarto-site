@@ -25,5 +25,17 @@
   },
   "support/volunteer/index.qmd": {
     "index.html": "6e4aecb7"
+  },
+  "learn/educational-events/index.qmd": {
+    "index.html": "a578208f"
+  },
+  "support/give/index.qmd": {
+    "index.html": "e6e1f00f"
+  },
+  "contact/index.qmd": {
+    "index.html": "294caced"
+  },
+  "learn/events-and-classes/index.qmd": {
+    "index.html": "96d17519"
   }
 }

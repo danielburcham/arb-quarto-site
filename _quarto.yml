@@ -13,19 +13,17 @@ project:
     
 format:
   html:
-    theme: litera
+    theme: 
+        - litera
+        - styles.scss
 
 website:
-  title: "Western Discovery Arboretum"
-  description: ""
+  title: Discovery Arboretum
   site-url: https://arbwest.colostate.edu
   repo-url: https://github.com/danielburcham/arb-quarto-site
-  
   google-analytics: ""
-  
   open-graph:
     locale: en_US
-
   navbar:
     left:
       - text: "Discover"
@@ -38,8 +36,8 @@ website:
         href: visit/index.qmd
       - text: "Learn"
         menu:
-          - text: "Education Programs"
-            href: learn/classes/index/qmd
+          - text: "Events and classes"
+            href: learn/events-and-classes/index.qmd
           - text: "Explore our trees"
             href: learn/explore-our-trees/index.qmd
       - text: "Support"
@@ -48,10 +46,15 @@ website:
             href: support/volunteer/index.qmd
           - text: "Give"
             href: support/give/index.qmd
+    logo: CSU-Symbol-r-357-617-RGB.png
+    logo-alt: Colorado State University
     right:
       - text: "Contact"
         href: contact/index.qmd
-    
   search:
     location: navbar
     type: textbox
+  page-footer:
+    background: "#1E4D2B"
+    right: |
+        [![](https://brand.colostate.edu/wp-content/themes/csu-theme/assets/img/csu-onleline-final.svg){fig-alt="Colorado State University"}](https://www.colostate.edu)

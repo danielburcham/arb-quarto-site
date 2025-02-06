@@ -1,14 +1,47 @@
 ---
-title: "Home"
 format:
     html
+execute: 
+  echo: false
 ---
 
-## Quarto
+``` {r}
+#| classes: '.g-col-lg-6 .g-col-12 .g-col-md-12'
+#| warning: false
+source("carousel.R")
+carousel("home-carousel", 7000, yaml.load_file("carousel.yml"))
 
-Quarto enables you to weave together content and executable code into a
-finished document. To learn more about Quarto see <https://quarto.org>.
-
-```{r}
-1 + 1
 ```
+```{=html}
+<style>
+.carousel.card {
+  padding-top: 2em;
+}
+
+.carousel img {
+  width: 80%;
+  margin-bottom: 110px;
+}
+
+.carousel-control-prev-icon, .carousel-control-next-icon {
+  margin-bottom: 110px;
+}
+
+.carousel-caption {
+  padding-top: 1em;
+}
+
+.fw-light {
+  font-family: Poppins;
+  font-weight: 500;
+}
+
+.touch {
+  
+}
+</style>
+```
+
+### Welcome to the Discovery Arboretum at Colorado State University!
+
+The Discovery Arboretum is home to over 1,000 trees from more than 800 taxa on a modest two acres. We are a learning laboratory dedicated to people and trees on the main campus of Colorado State University. We are open to everyone on our campus community every day of the year. 

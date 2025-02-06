@@ -2,19 +2,8 @@
 title: Volunteer
 format:
     html
-form:
-    action: "/action.js"
-    method: GET
-    submit: "Submit"
-    fields: 
-    - name: Name
-      type: text
-      id: textField1
-      label: "Full Name"
-    - name: Email
-      type: email
-      id: textField2
-      label: "E-mail Address"
 ---
 
-{{< form >}}
+Volunteers are essential to the Arboretum's work. We rely on volunteers to help with landscape maintenance, cleaning, and other tasks. By volunteering your time, you will help us celebrate and sustain the relationship between people and trees in an endearing campus landscape. You will also learn from our expertise, acquire new skills, and meet other nature enthusiasts. 
+
+We are looking for dependable volunteers able to commit at least 20 hours of their time per year. To learn more about current opportunities, contact our Volunteer Coordinator Sarah Wilhelm by [email](mailto:sarah.j.wilhelm@colostate.edu).
