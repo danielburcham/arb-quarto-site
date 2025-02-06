@@ -1,12 +1,9 @@
 
-    - caption: "Explore our trees"
-      image: "images/DSCF6254.jpg"
+    - image: "images/DSCF6254.jpg"
       link: "learn/explore-our-trees/index.qmd"
 
-    - caption: "Sign up for a class"
-      image: "images/DSCF5910.jpg"
-      link: "learn/educational-events/index.qmd"
+    - image: "images/DSCF5910.jpg"
+      link: "learn/events-and-classes/index.qmd"
       
-    - caption: "Help us grow"
-      image: "images/DSCF3100.jpg"
+    - image: "images/DSCF3100.jpg"
       link: "support/give/index.qmd"
