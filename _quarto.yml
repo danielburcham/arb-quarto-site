@@ -1,25 +1,26 @@
 project:
   type: website
-
+  output-dir: _site
+  render:
+    - "*.qmd"
+    - "*.md"
+  resources: "/images"
   preview: 
     port: 4200
     browser: true
     watch-inputs: true
     navigate: true
-  
-  render:
-    - "*.qmd"
-    - "*.md"
     
 format:
   html:
     theme: 
         - litera
         - styles.scss
+    mainfont: Poppins
 
 website:
   title: Discovery Arboretum
-  site-url: https://arbwest.colostate.edu
+  site-url: https://www.colostate.edu/discovery-arb
   repo-url: https://github.com/danielburcham/arb-quarto-site
   google-analytics: ""
   open-graph:
