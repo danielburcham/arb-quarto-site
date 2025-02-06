@@ -25,6 +25,7 @@ website:
   open-graph:
     locale: en_US
   navbar:
+    background: "#1E4D2B"
     left:
       - text: "Discover"
         menu: 
