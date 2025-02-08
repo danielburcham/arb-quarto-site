@@ -4,15 +4,55 @@
 
 /*-- scss:rules --*/
 
-.nav-footer-right {
-    max-width: 300px;
-}
-
 .navbar-brand {
-    padding-right: 30px;
+    padding-right: 15px;
+    padding-left: 15px;
 }
 
 .navbar-logo {
-    min-width: 75px;
-    min-height: 75px;
+    height: 60px;
+    min-height: 60px;
+    width: auto;
+    padding-right: 4px;
+}
+
+.nav-footer .nav-footer-center {
+    font-size: 0;
+    max-width: 0%;
+}
+
+.nav-footer .nav-footer-right {
+    max-width: 300px;
+    margin: auto;
+    padding-top: 10px;
+}
+
+.nav-footer-left,
+.nav-footer-right {
+    text-align: center;
+    margin: auto;
+    width: 100%;
+    min-height: 2em;
+}
+
+@media (min-width: map-get($grid-breakpoints, md)) {
+    .nav-footer-left {
+        text-align: left;
+    }
+    .nav-footer-right {
+        text-align: right;
+    }
+    .nav-footer-left,
+    .nav-footer-right {
+        flex: 1 1 33%;
+    }
+}
+
+@media (max-width: map-get($grid-breakpoints, md)) {
+        .navbar-brand {
+        display: none;
+    }
+    .navbar-title {
+        display: none;
+    }
 }

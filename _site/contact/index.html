@@ -24,7 +24,6 @@ ul.task-list li input[type="checkbox"] {
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../site_libs/quarto-nav/headroom.min.js"></script>
 <script src="../site_libs/clipboard/clipboard.min.js"></script>
 <script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
@@ -119,7 +118,7 @@ ul.task-list li input[type="checkbox"] {
     <ul class="dropdown-menu" aria-labelledby="nav-menu-learn">    
         <li>
     <a class="dropdown-item" href="../learn/events-and-classes/index.html">
- <span class="dropdown-text">Educational events</span></a>
+ <span class="dropdown-text">Events and classes</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../learn/explore-our-trees/index.html">
@@ -292,7 +291,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp("https:\/\/arbwest\.colostate\.edu");
+      var filterRegex = new RegExp("https:\/\/www\.colostate\.edu\/discovery-arb");
     var isInternal = (href) => {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }
@@ -624,7 +623,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">
-      &nbsp;
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item">
+ Copyright 2025 Colorado State University
+  </li>  
+</ul>
     </div>   
     <div class="nav-footer-center">
       &nbsp;
