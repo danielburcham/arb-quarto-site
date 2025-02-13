@@ -19,6 +19,7 @@ jobs:
         uses: r-lib/actions/setup-r-dependencies@v2
         with:
           packages:
+            any::shinylive@0.1.1
             any::knitr
             any::rmarkdown
             any::bslib
