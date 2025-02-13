@@ -49,7 +49,7 @@
 }
 
 @media (max-width: map-get($grid-breakpoints, md)) {
-        .navbar-brand {
+    .navbar-brand {
         display: none;
     }
     .navbar-title {

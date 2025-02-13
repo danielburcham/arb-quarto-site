@@ -1,0 +1,224 @@
+# Import and wrangle data
+library(bslib)
+library(bsicons)
+library(htmltools)
+library(sf)
+library(shiny)
+library(tidyverse)
+
+download.file("https://raw.githubusercontent.com/danielburcham/arbdatascience/refs/heads/master/Colorado_Tree_Observation_Dashboard-Trees.csv", "Colorado_Tree_Observation_Dashboard-Trees.csv")
+trees <- st_read("Colorado_Tree_Observation_Dashboard-Trees.csv", quiet = TRUE, options = c("X_POSSIBLE_NAMES=x", "Y_POSSIBLE_NAMES=y")) |> 
+    select(c(2:10,13))
+colnames(trees) <- c("treeID","commonName","scientificName","affiliation","creator","creationDate","lastEditor","lastEditDate","globalID","geometry")
+trees <- trees |> 
+    mutate(treeID = as.integer(treeID),
+           scientificName = trimws(trees$scientificName,"both"))
+
+download.file("https://raw.githubusercontent.com/danielburcham/arbdatascience/refs/heads/master/Colorado_Tree_Observation_Dashboard-Observations.csv", "Colorado_Tree_Observation_Dashboard-Observations.csv")
+observations <- read_csv("Colorado_Tree_Observation_Dashboard-Observations.csv",col_names=c(
+    "objectID","date","treeID","siteType","landUse","irrigation","DBH","height",
+    "fallColor","flowering","fruiting","treeStatus","crownVigor",
+    "bioticDamage","abioticDamage","invasivePotential","comments",
+    "creator","creationDate","lastEditor","lastEditDate","globalID"
+),
+    skip=1,
+    col_types=list(
+        objectID = col_integer(),
+        date = col_datetime(format="%m/%d/%Y %I:%M:%S %p"),
+        treeID = col_integer(),
+        siteType = col_character(),
+        landUse = col_character(),
+        irrigation = col_character(),
+        DBH = col_double(),
+        height = col_double(),
+        fallColor = col_character(),
+        flowering = col_character(),
+        fruiting = col_character(),
+        treeStatus = col_character(),
+        crownVigor = col_character(),
+        bioticDamage = col_character(),
+        abioticDamage = col_character(),
+        invasivePotential = col_character(),
+        comments = col_character(),
+        creator = col_character(),
+        creationDate = col_datetime(format="%m/%d/%Y %I:%M:%S %p"),
+        lastEditor = col_character(),
+        lastEditDate = col_datetime(format="%m/%d/%Y %I:%M:%S %p"),
+        globalID = col_character()
+)) |>
+    select(2:22)
+
+observations$siteType <- factor(observations$siteType, 
+                                levels=c("SC","SP","M","PB","OH","FY","SY",
+                                           "BY","MP","OM","NAT"),
+                                labels=c("Sidewalk cutout","Sidewalk planting strip",
+                                         "Median","Planter box","Other hardscape",
+                                         "Front yard","Side yard","Back yard",
+                                         "Maintained park","Other maintained landscape",
+                                         "Natural area"))
+observations$landUse <- factor(observations$landUse, 
+                               levels=c("SFR-D","SFR-A","MFR","MIX","COMM",
+                                        "IND","INST","MP","NAT","CEM","GC",
+                                        "AG","UT","W","TR","V","O"), 
+                               labels=c("Single-family residential - detached", "Single-family residential - attached","Multi-family residential","Mixed use","Commercial","Industrial","Institutional","Maintained park","Natural area","Cemetery","Golf course","Agricultural","Utility","Water or wetland","Transportation","Vacant lot","Other"))
+observations$irrigation <- factor(observations$irrigation,
+                                  levels=c("N","OS","MI"),
+                                  labels=c("None","Overhead sprinklers",
+                                             "Microirrigation"))
+observations$fallColor <- factor(observations$fallColor,
+                                 levels=c("V","D","N"),
+                                 labels=c("Vivid","Dull","None"))
+observations$flowering <- factor(observations$flowering,
+                                 levels=c("V","S","D","N"),
+                                 labels=c("Vibrant","Sparse","Dull","None"))
+observations$fruiting <- factor(observations$fruiting,
+                                levels=c("H","S","N"),
+                                labels=c("Heavy","Sparse","None"))
+observations$treeStatus <- factor(observations$treeStatus, 
+                                  levels=c("A","D","R","S","U"),
+                                  labels=c("Alive","Dead","Removed",
+                                             "Stump","Unknown"))
+observations$crownVigor <- factor(observations$crownVigor,
+                                  levels=c("H","SLU","MU","SEU","D"),
+                                  labels=c("Healthy","Slightly unhealthy",
+                                             "Moderately unhealthy",
+                                             "Severely unhealthy","Dead"))
+observations$bioticDamage <- factor(observations$bioticDamage,
+                                    levels=c("ND","GI","DI","SI","GA","BB",
+                                             "BI","GD","FD","TD","CA","RU",
+                                             "DE","DC","VW","WA","DA","UD"),
+                                    labels=c("No damage","General insects",
+                                             "Defoliating insects","Sucking insects",
+                                             "Gall-making insects","Bark beetles",
+                                             "Boring insects","General diseases",
+                                             "Foliage diseases","Twig diseases",
+                                             "Cankers (non-rust)","Rusts",
+                                             "Decay","Decline complexes",
+                                             "Vascular wilts","Wild animals",
+                                             "Domestic animals","Unknown damage"))
+observations$abioticDamage <- factor(observations$abioticDamage,
+                                     levels=c("ND","GA","WD","SD","MD","FD",
+                                              "CT","NDE","WDE","PS"),
+                                     labels=c("No damage","General abiotic",
+                                              "Winter damage","Storm damage",
+                                              "Mechanical damage","Fire damage",
+                                              "Chemical toxicity","Nutrient deficiency",
+                                              "Water deficiency","Poor soil structure"))
+observations$invasivePotential <- factor(observations$invasivePotential,
+                                         levels=c("H","M","I"),
+                                         labels=c("High","Moderate","Insignificant"))
+
+theme_nice <- function() {
+  theme_minimal(base_family = "sans") + 
+    theme(panel.grid.minor = element_blank(),
+          panel.spacing.x = unit(25, "points"),
+          plot.title = element_text(face = "bold"),
+          axis.title = element_text(face= "bold", size=14),
+          axis.text = element_text(size=13),
+          strip.text = element_text(face = "bold",
+                                    size = 12, hjust = 0),
+          strip.background = element_rect(fill = "grey80", color = NA),
+          legend.text = element_text(size=12))
+}
+
+scale_fill_custom <- function(...){
+    ggplot2:::manual_scale(
+        'fill', 
+        values = setNames(c("#006144","#82C503","#CFFC00","#FFC038","#E56A54"),
+                              c("Healthy","Slightly unhealthy","Moderately unhealthy",
+                                 "Severely unhealthy","Dead")), 
+        ...
+    )
+}
+
+# Define user interface
+ui <- page_navbar(
+    nav_panel(
+        page_fillable(
+            layout_columns(value_box(title = "Trees observed",
+                                     value = length(trees$treeID),
+                                     showcase = bsicons::bs_icon("tree-fill"),
+                                     showcase_layout = "top right",
+                                     theme = value_box_theme(bg = "#dee2e6", fg = "#000000")),
+                           value_box(title = "Taxa observed",
+                                     value = length(unique(trees$scientificName)),
+                                     showcase = bsicons::bs_icon("tree"),
+                                     showcase_layout = "top right",
+                                     theme = value_box_theme(bg = "#dee2e6", fg = "#000000")),
+                           value_box(title = "Percent survival",
+                                     value = observations |>
+                                         group_by(treeID) |>
+                                         slice_max(date, n=1) |>
+                                         (\(data) sum(data$treeStatus != "D"))() / length(trees$treeID) * 100,
+                                     showcase = bsicons::bs_icon("graph-up"),
+                                     showcase_layout = "top right",
+                                     theme = value_box_theme(bg = "#dee2e6", fg = "#000000")),
+                           col_widths = c(4,4,4),
+                           max_height = "150px"),
+            card(
+                full_screen = FALSE,
+                card_header("Map"),
+                uiOutput("map")
+            )),
+        title = "Overview"),
+    nav_panel(card(
+                full_screen = FALSE,
+                card_header("Crown vigor ratings"),
+                layout_sidebar(
+                    fillable = TRUE,
+                    sidebar = sidebar(width = 325,
+                        selectInput('species', 'Choose species', 
+                                                      choices = unique(trees$scientificName), 
+                                                      selected = first(unique(trees$scientificName)),
+                                                      multiple = TRUE,
+                                                      selectize = TRUE), 
+                                      radioButtons('name', 'Choose name display', 
+                                                   choiceNames = c("Scientific name", "Common name"),
+                                                   choiceValues = c("scientificName","commonName"))),
+                    plotOutput("plot")
+                )
+            ),
+              title = "Crown Vigor"),
+    nav_panel("Future observations.",
+              title = "Growth"),
+    nav_panel("Future observations.",
+              title = "Survival"),
+    title = "Tree Observation Dashboard"
+)
+
+# Define server function
+server <- function(input, output, session) {
+    
+    data <- reactive({
+        observations |>
+            left_join(as.data.frame(trees), by="treeID") |>
+            select(date,input$name,crownVigor) |>
+            filter(max(year(date)) & (!!sym(input$name) %in% input$species)) |> 
+            group_by(!!sym(input$name),crownVigor) |>
+            summarize(n = n())
+    })
+    
+    output$plot <- renderPlot({
+        ggplot(data(), aes(.data[[input$name]], n, fill=crownVigor)) +
+            geom_bar(position = "stack", stat = "identity", width = 0.7) +
+            xlab("Species") + ylab("Trees") +
+            theme_nice() + 
+            theme(axis.text.x = element_text(angle=45,vjust=1,hjust=1)) +
+            scale_fill_custom() + 
+            guides(fill=guide_legend(title="Ratings",position="left"))
+    })
+    
+    output$map <- renderUI({
+        tags$html(tags$head(HTML('<script type="module" src="https://js.arcgis.com/embeddable-components/4.31/arcgis-embeddable-components.esm.js"></script>')),tags$body(HTML('<arcgis-embedded-map style="height:100%;width:100%;" item-id="a1afdce0b8004b14a268dcec8ec5043e" theme="light" portal-url="https://csurams.maps.arcgis.com" ></arcgis-embedded-map>')))
+    })
+    
+    observeEvent(input$name,{ 
+        updateSelectInput(session,'species','Choose species',
+                          choices=unique(as.data.frame(trees)|>select(input$name)),
+                          selected=first(unique(as.data.frame(trees)|>select(input$name))))
+    },ignoreInit=TRUE)
+    
+}
+
+# Create Shiny app
+shinyApp(ui, server)
