@@ -35,6 +35,14 @@
     min-height: 2em;
 }
 
+.ol {
+    font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+}
+
+.p {
+    padding-top: 3em;
+}
+
 @media (min-width: map-get($grid-breakpoints, md)) {
     .nav-footer-left {
         text-align: left;

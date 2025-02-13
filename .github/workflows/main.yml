@@ -21,6 +21,12 @@ jobs:
           packages:
             any::knitr
             any::rmarkdown
+            any::bslib
+            any::bsicons
+            any::htmltools
+            any::shiny
+            any::sf
+            any::tidyverse
       
       - name: "Setup Quarto"
         uses: quarto-dev/quarto-actions/setup@v2

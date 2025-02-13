@@ -261,16 +261,19 @@ shinyApp(ui, server)
 ```
 :::
 
-
+:::{.p}
 Through the work, we hope to answer several important questions,
 including:
+:::
 
+:::{.ol}
 1.  What are the survival rates for novel trees growing in Colorado
     communities?
 2.  How quickly do novel trees grow to a typical size in Colorado
     communities?
 3.  How do site conditions and stewardship affect survival, condition,
     and growth of novel trees?
+:::
 
 Ultimately, our discoveries will be strengthened with more people making
 observations of trees growing in diverse settings. If you’re interested
