@@ -24,7 +24,7 @@ website:
   title: Discovery Arboretum
   site-url: https://www.colostate.edu/discovery-arb
   repo-url: https://github.com/danielburcham/arb-quarto-site
-  google-analytics: ""
+  google-analytics: "G-H0H6YFRLY9"
   open-graph:
     locale: en_US
   navbar:
