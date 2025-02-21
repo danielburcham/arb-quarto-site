@@ -42,6 +42,6 @@ carousel("home-carousel", 7000, yaml.load_file("carousel.yml"))
 </style>
 ```
 
-### Welcome to the Discovery Arboretum at Colorado State University!
+### Welcome to the Discovery Arboretum!
 
-The Discovery Arboretum is home to over 1,000 trees from more than 800 taxa on a modest two acres. We are a learning landscape dedicated to people and trees on the main campus of CSU. We are open to everyone on our campus community every day of the year. 
+The Arboretum is home to over 1,000 trees from more than 800 taxa on a modest two acres. We are a learning landscape dedicated to people and trees on the main campus of CSU. We are open to everyone on our campus community every day of the year. 

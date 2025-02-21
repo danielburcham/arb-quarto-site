@@ -6,29 +6,6 @@ filters:
     - shinylive
 ---
 
-Trees are a distinctive and prominent part of Colorado communities.
-Their canopies provide welcome shelter from the elements and beauty in
-all seasons. Over time, Coloradoans have played a central role in
-cultivating and sustaining the forests in our towns and cities. With few
-naturally occurring trees in most places, people have planted, watered,
-and maintained trees to informally develop an extensive forest over many
-generations.
-
-Through informal observations, we know many of the trees suited to the
-state’s harsh landscapes, but many of the dependable species are
-imperiled by a range of disturbances. Some are dying from aggressive
-pests and diseases. Other trees may not be suitable for our region as
-the climate warms in the future. With these threats, it is important to
-expand the diversity of trees grown in our community forests to minimize
-the impact of losing any one type.
-
-With support from the Colorado Horticulture Research and Education Foundation ([CHREF](https://www.coloradonga.org/colorado-horticulture-research---education-foundation){target="_blank"}), we developed a collaborative framework and digital platform for
-observing novel species with potential value. Using the platform, anyone
-can record the growth and condition of trees in a standardized way,
-allowing for greater consistency among observations and clarity among
-summaries. In the dashboard below, you can explore some of the
-information and about trees currently under observation.
-
 ::: column-page
 ```{shinylive-r}
 #| standalone: true
@@ -263,9 +240,33 @@ shinyApp(ui, server)
 :::
 
 :::{.p}
+Trees are a distinctive and prominent part of Colorado communities.
+Their canopies provide welcome shelter from the elements and beauty in
+all seasons. Over time, Coloradoans have played a central role in
+cultivating and sustaining the forests in our towns and cities. With few
+naturally occurring trees in most places, people have planted, watered,
+and maintained trees to informally develop an extensive forest over many
+generations.
+:::
+
+Through informal observations, we know many of the trees suited to the
+state’s harsh landscapes, but many of the dependable species are
+imperiled by a range of disturbances. Some are dying from aggressive
+pests and diseases. Other trees may not be suitable for our region as
+the climate warms in the future. With these threats, it is important to
+expand the diversity of trees grown in our community forests to minimize
+the impact of losing any one type.
+
+With support from the Colorado Horticulture Research and Education Foundation ([CHREF](https://www.coloradonga.org/colorado-horticulture-research---education-foundation){target="_blank"}), we developed a collaborative framework and digital platform for
+observing novel species with potential value. Using the platform, anyone
+can record the growth and condition of trees in a standardized way,
+allowing for greater consistency among observations and clarity among
+summaries. In the dashboard below, you can explore some of the
+information and about trees currently under observation.
+
+
 Through the work, we hope to answer several important questions,
 including:
-:::
 
 :::{.ol}
 1.  What are the survival rates for novel trees growing in Colorado
