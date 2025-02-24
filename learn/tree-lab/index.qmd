@@ -239,7 +239,7 @@ shinyApp(ui, server)
 ```
 :::
 
-:::{.p}
+::: p
 Trees are a distinctive and prominent part of Colorado communities.
 Their canopies provide welcome shelter from the elements and beauty in
 all seasons. Over time, Coloradoans have played a central role in
@@ -257,18 +257,20 @@ the climate warms in the future. With these threats, it is important to
 expand the diversity of trees grown in our community forests to minimize
 the impact of losing any one type.
 
-With support from the Colorado Horticulture Research and Education Foundation ([CHREF](https://www.coloradonga.org/colorado-horticulture-research---education-foundation){target="_blank"}), we developed a collaborative framework and digital platform for
+With support from the Colorado Horticulture Research and Education
+Foundation
+([CHREF](https://www.coloradonga.org/colorado-horticulture-research---education-foundation){target="_blank"}),
+we developed a collaborative framework and digital platform for
 observing novel species with potential value. Using the platform, anyone
 can record the growth and condition of trees in a standardized way,
 allowing for greater consistency among observations and clarity among
 summaries. In the dashboard below, you can explore some of the
 information and about trees currently under observation.
 
-
 Through the work, we hope to answer several important questions,
 including:
 
-:::{.ol}
+::: ol
 1.  What are the survival rates for novel trees growing in Colorado
     communities?
 2.  How quickly do novel trees grow to a typical size in Colorado
@@ -284,4 +286,10 @@ and sharing your observations with the broader public. To get started,
 take a look at our
 [handbook](Colorado-Tree-Observation-Dashboard-Handbook.pdf){target="_blank"}.
 
+### Sponsors
 
+::: {style="padding-top: 1.2em; padding-left: 1.2em; padding-right: 1.2em;"}
+[![](CHREF_2c_LOGO_010815.jpg){fig-alt="Colorado Horticulture Research and Education Foundation logo"
+fig-align="center"
+width="35%"}](https://www.coloradonga.org/colorado-horticulture-research---education-foundation){target="_blank"}
+:::
