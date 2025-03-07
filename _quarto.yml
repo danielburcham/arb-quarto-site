@@ -25,6 +25,7 @@ website:
   site-url: https://www.colostate.edu/discovery-arb
   repo-url: https://github.com/danielburcham/arb-quarto-site
   google-analytics: "G-H0H6YFRLY9"
+  favicon: images/favicon.ico
   open-graph:
     locale: en_US
   navbar:
@@ -65,4 +66,4 @@ website:
     right: |
         [![](https://brand.colostate.edu/wp-content/themes/csu-theme/assets/img/csu-onleline-final.svg){fig-alt="Colorado State University"}](https://www.colostate.edu)
     left: 
-        - © 2025 Colorado State University
+        - © 2025 Colorado State University, Fort Collins, Colorado 80523 USA

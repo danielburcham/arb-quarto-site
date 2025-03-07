@@ -291,5 +291,5 @@ take a look at our
 ::: {style="padding-top: 1.2em; padding-left: 1.2em; padding-right: 1.2em;"}
 [![](CHREF_2c_LOGO_010815.jpg){fig-alt="Colorado Horticulture Research and Education Foundation logo"
 fig-align="center"
-width="35%"}](https://www.coloradonga.org/colorado-horticulture-research---education-foundation){target="_blank"}
+width="35%"}](https://www.coloradonga.org/colorado-horticulture-research---education-foundation)
 :::
