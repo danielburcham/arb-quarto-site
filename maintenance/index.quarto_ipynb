@@ -1,0 +1,30 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "---\n",
+        "format: \n",
+        "    html:\n",
+        "        page-layout: full\n",
+        "---\n",
+        "\n",
+        "```{html}\n",
+        "<iframe width=\"500\" height=\"400\" frameborder=\"0\" scrolling=\"no\" marginheight=\"0\" marginwidth=\"0\" \n",
+        "src=\"https://csurams.maps.arcgis.com/apps/dashboards/96e38b00adfb4b7aa1a1dcb5bd45e7c3\"></iframe>\n",
+        "```"
+      ],
+      "id": "7b815696"
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "display_name": "Python 3",
+      "language": "python",
+      "name": "python3"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 5
+}

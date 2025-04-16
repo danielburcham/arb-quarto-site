@@ -64,8 +64,12 @@ collection, CSU faculty and staff identified some of the most dependable
 woody plants for use in regional landscapes, and the recommendations
 were regularly shared with the green industry and broader public.
 
-![In this aerial image from September 2023, the arboretum landscape contains a dense cover of established trees. The surrounding land has been extensively developed for a variety of uses, especially compared to earlier years. Source: National Agriculture Imagery Program, US Department of Agriculture](m_4010532_nw_13_20230925.jpg){#2023-aerial .lightbox
-width="60%"}
+![In this aerial image from September 2023, the arboretum landscape
+contains a dense cover of established trees. The surrounding land has
+been extensively developed for a variety of uses, especially compared to
+earlier years. Source: National Agriculture Imagery Program, US
+Department of Agriculture](m_4010532_nw_13_20230925.jpg){#2023-aerial
+.lightbox width="60%"}
 
 For nearly 50 years, the arboretum has remained committed to its basic
 purpose amid significant change. Between 1940 and 2000, the developed
