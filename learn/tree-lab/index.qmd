@@ -194,7 +194,7 @@ ui <- page_navbar(
               title = "Crown Vigor"),
     nav_panel(card(
                 full_screen = FALSE,
-                card_header("Diameter growth"),
+                card_header("Annual growth"),
                 layout_sidebar(
                     fillable = TRUE,
                     sidebar = sidebar(width = 325,
@@ -249,8 +249,9 @@ server <- function(input, output, session) {
             guides(fill=guide_legend(title="Ratings",position="left"))
     
     output$growthPlot <- renderPlot({
-        ggplot(growthData(), aes(DBH, G, color=input$name)) +
+        ggplot(growthData(), aes(DBH, G, color=.data[[input$name]])) +
             geom_point() +
+            geom_smooth() +
             xlab("Size") + ylab("Growth") +
             theme_nice() + 
             scale_fill_custom() + 
