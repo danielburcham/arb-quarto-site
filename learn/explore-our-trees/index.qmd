@@ -21,6 +21,7 @@ Using our interactive map, you can easily explore the arboretum's tree collectio
 ```
 :::
 
+[Full screen version](/learn/explore-our-trees/map/)
 
 ## Labels
 You may notice that many of our plants are labeled in the arboretum. The labels contain essential information about each plant, and they're formatted consistently with the same information arranged from top to bottom. 
