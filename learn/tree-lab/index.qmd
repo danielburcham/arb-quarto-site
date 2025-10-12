@@ -187,7 +187,8 @@ ui <- page_navbar(
                                                       selectize = TRUE), 
                                       radioButtons('name', 'Choose name display', 
                                                    choiceNames = c("Scientific name", "Common name"),
-                                                   choiceValues = c("scientificName","commonName"))),
+                                                   choiceValues = c("scientificName","commonName"),
+                                                   selected = "scientificName")),
                     plotOutput("vigorPlot")
                 )
             ),
@@ -205,11 +206,12 @@ ui <- page_navbar(
                                                       selectize = TRUE), 
                                       radioButtons('name', 'Choose name display', 
                                                    choiceNames = c("Scientific name", "Common name"),
-                                                   choiceValues = c("scientificName","commonName"))),
+                                                   choiceValues = c("scientificName","commonName"),
+                                                   selected = "scientificName")),
                     plotOutput("growthPlot")
                 )
             ),
-              title = "Diameter Growth"),
+              title = "Growth"),
     nav_panel("Future observations.",
               title = "Survival"),
     title = "Tree Observation Dashboard"
@@ -235,7 +237,7 @@ server <- function(input, output, session) {
             arrange(input$name,treeID,date) |>
             mutate(dDBH=c(diff(DBH), NA),
                    dt=c(as.numeric(diff(date))/365.25,NA),
-                   G=dDBH/dt) |>
+                   G=dDBH/dt)
             #summarize mean and sd growth
     })
     
@@ -247,16 +249,14 @@ server <- function(input, output, session) {
             theme(axis.text.x = element_text(angle=45,vjust=1,hjust=1)) +
             scale_fill_custom() + 
             guides(fill=guide_legend(title="Ratings",position="left"))
+    )}
     
     output$growthPlot <- renderPlot({
         ggplot(growthData(), aes(DBH, G, color=.data[[input$name]])) +
             geom_point() +
             geom_smooth() +
             xlab("Size") + ylab("Growth") +
-            theme_nice() + 
-            scale_fill_custom() + 
-            guides(fill=guide_legend(title="Ratings",position="left"))
-    
+            theme_nice()
     })
     
     output$map <- renderUI({

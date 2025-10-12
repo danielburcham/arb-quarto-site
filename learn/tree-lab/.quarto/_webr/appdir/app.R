@@ -175,12 +175,28 @@ ui <- page_navbar(
                                       radioButtons('name', 'Choose name display', 
                                                    choiceNames = c("Scientific name", "Common name"),
                                                    choiceValues = c("scientificName","commonName"))),
-                    plotOutput("plot")
+                    plotOutput("vigorPlot")
                 )
             ),
               title = "Crown Vigor"),
-    nav_panel("Future observations.",
-              title = "Growth"),
+    nav_panel(card(
+                full_screen = FALSE,
+                card_header("Annual growth"),
+                layout_sidebar(
+                    fillable = TRUE,
+                    sidebar = sidebar(width = 325,
+                        selectInput('species', 'Choose species', 
+                                                      choices = unique(trees$scientificName), 
+                                                      selected = first(unique(trees$scientificName)),
+                                                      multiple = TRUE,
+                                                      selectize = TRUE), 
+                                      radioButtons('name', 'Choose name display', 
+                                                   choiceNames = c("Scientific name", "Common name"),
+                                                   choiceValues = c("scientificName","commonName"))),
+                    plotOutput("growthPlot")
+                )
+            ),
+              title = "Diameter Growth"),
     nav_panel("Future observations.",
               title = "Survival"),
     title = "Tree Observation Dashboard"
@@ -189,7 +205,7 @@ ui <- page_navbar(
 # Define server function
 server <- function(input, output, session) {
     
-    data <- reactive({
+    vigorData <- reactive({
         observations |>
             left_join(as.data.frame(trees), by="treeID") |>
             select(date,input$name,crownVigor) |>
@@ -198,18 +214,39 @@ server <- function(input, output, session) {
             summarize(n = n())
     })
     
-    output$plot <- renderPlot({
-        ggplot(data(), aes(.data[[input$name]], n, fill=crownVigor)) +
+    growthData <- reactive({
+        observations |>
+            left_join(as.data.frame(trees), by="treeID") |>
+            select(date,treeID,input$name,DBH) |> 
+            group_by(treeID) |>
+            arrange(input$name,treeID,date) |>
+            mutate(dDBH=c(diff(DBH), NA),
+                   dt=c(as.numeric(diff(date))/365.25,NA),
+                   G=dDBH/dt)
+            #summarize mean and sd growth
+    })
+    
+    output$vigorPlot <- renderPlot({
+        ggplot(vigorData(), aes(.data[[input$name]], n, fill=crownVigor)) +
             geom_bar(position = "stack", stat = "identity", width = 0.7) +
             xlab("Species") + ylab("Trees") +
             theme_nice() + 
             theme(axis.text.x = element_text(angle=45,vjust=1,hjust=1)) +
             scale_fill_custom() + 
             guides(fill=guide_legend(title="Ratings",position="left"))
+    )}
+    
+    output$growthPlot <- renderPlot({
+        ggplot(growthData(), aes(DBH, G, color=.data[[input$name]])) +
+            geom_point() +
+            geom_smooth() +
+            xlab("Size") + ylab("Growth") +
+            theme_nice()
     })
     
     output$map <- renderUI({
-        tags$html(tags$head(HTML('<script type="module" src="https://js.arcgis.com/embeddable-components/4.31/arcgis-embeddable-components.esm.js"></script>')),tags$body(HTML('<arcgis-embedded-map style="height:100%;width:100%;" item-id="a1afdce0b8004b14a268dcec8ec5043e" theme="light" portal-url="https://csurams.maps.arcgis.com" ></arcgis-embedded-map>')))
+        HTML('<script type="module" src="https://js.arcgis.com/embeddable-components/4.31/arcgis-embeddable-components.esm.js"></script><arcgis-embedded-map style="height:100%;width:100%;" item-id="a1afdce0b8004b14a268dcec8ec5043e" theme="light" portal-url="https://csurams.maps.arcgis.com" ></arcgis-embedded-map>')
+        
     })
     
     observeEvent(input$name,{ 
