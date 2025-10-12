@@ -233,12 +233,14 @@ server <- function(input, output, session) {
         observations |>
             left_join(as.data.frame(trees), by="treeID") |>
             select(date,treeID,input$name,DBH) |> 
+            filter((!!sym(input$name) %in% input$species)) |>
             group_by(treeID) |>
             arrange(input$name,treeID,date) |>
             mutate(dDBH=c(diff(DBH), NA),
                    dt=c(as.numeric(diff(date))/365.25,NA),
-                   G=dDBH/dt)
-            #summarize mean and sd growth
+                   G=dDBH/dt) |>
+            group_by(!!sym(input$name)) |>
+            summarize(mean = mean(G,na.rm=TRUE), sd=sd(G,na.rm=TRUE))
     })
     
     output$vigorPlot <- renderPlot({
@@ -252,10 +254,9 @@ server <- function(input, output, session) {
     })
     
     output$growthPlot <- renderPlot({
-        ggplot(growthData(), aes(DBH, G, color=.data[[input$name]])) +
-            geom_point() +
-            geom_smooth() +
-            xlab("Size") + ylab("Growth") +
+        ggplot(growthData(), aes(.data[[input$name]], mean) +
+            geom_boxplot() +
+            xlab("Species") + ylab("Average Annual Growth") +
             theme_nice()
     })
     
