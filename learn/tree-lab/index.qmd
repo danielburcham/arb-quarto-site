@@ -253,7 +253,7 @@ server <- function(input, output, session) {
     
     output$growthPlot <- renderPlot({
         ggplot(growthData(), aes(.data[[input$name]], G) +
-            geom_boxplot(aes(.data[[input$name]],G),na.rm=TRUE) +
+            geom_boxplot(na.rm=TRUE) +
             xlab("Species") + ylab("Average Annual Growth") +
             theme_nice() + 
             theme(axis.text.x = element_text(angle=45,vjust=1,hjust=1))
