@@ -249,7 +249,7 @@ server <- function(input, output, session) {
             theme(axis.text.x = element_text(angle=45,vjust=1,hjust=1)) +
             scale_fill_custom() + 
             guides(fill=guide_legend(title="Ratings",position="left"))
-    )}
+    })
     
     output$growthPlot <- renderPlot({
         ggplot(growthData(), aes(DBH, G, color=.data[[input$name]])) +
