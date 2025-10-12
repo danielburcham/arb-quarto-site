@@ -167,36 +167,38 @@ ui <- page_navbar(
                 layout_sidebar(
                     fillable = TRUE,
                     sidebar = sidebar(width = 325,
-                        selectInput('species', 'Choose species', 
+                        selectInput('speciesVigor', 'Choose species', 
                                                       choices = unique(trees$scientificName), 
                                                       selected = first(unique(trees$scientificName)),
                                                       multiple = TRUE,
                                                       selectize = TRUE), 
-                                      radioButtons('name', 'Choose name display', 
+                                      radioButtons('nameVigor', 'Choose name display', 
                                                    choiceNames = c("Scientific name", "Common name"),
-                                                   choiceValues = c("scientificName","commonName"))),
+                                                   choiceValues = c("scientificName","commonName"),
+                                                   selected = "scientificName")),
                     plotOutput("vigorPlot")
                 )
             ),
               title = "Crown Vigor"),
     nav_panel(card(
                 full_screen = FALSE,
-                card_header("Annual growth"),
+                card_header("Growth measurements"),
                 layout_sidebar(
                     fillable = TRUE,
                     sidebar = sidebar(width = 325,
-                        selectInput('species', 'Choose species', 
+                        selectInput('speciesGrowth', 'Choose species', 
                                                       choices = unique(trees$scientificName), 
                                                       selected = first(unique(trees$scientificName)),
                                                       multiple = TRUE,
                                                       selectize = TRUE), 
-                                      radioButtons('name', 'Choose name display', 
+                                      radioButtons('nameGrowth', 'Choose name display', 
                                                    choiceNames = c("Scientific name", "Common name"),
-                                                   choiceValues = c("scientificName","commonName"))),
+                                                   choiceValues = c("scientificName","commonName"),
+                                                   selected = "scientificName")),
                     plotOutput("growthPlot")
                 )
             ),
-              title = "Diameter Growth"),
+              title = "Growth"),
     nav_panel("Future observations.",
               title = "Survival"),
     title = "Tree Observation Dashboard"
@@ -208,40 +210,40 @@ server <- function(input, output, session) {
     vigorData <- reactive({
         observations |>
             left_join(as.data.frame(trees), by="treeID") |>
-            select(date,input$name,crownVigor) |>
-            filter(max(year(date)) & (!!sym(input$name) %in% input$species)) |> 
-            group_by(!!sym(input$name),crownVigor) |>
+            select(date,input$nameVigor,crownVigor) |>
+            filter(max(year(date)) & (!!sym(input$nameVigor) %in% input$speciesVigor)) |> 
+            group_by(!!sym(input$nameVigor),crownVigor) |>
             summarize(n = n())
     })
     
     growthData <- reactive({
         observations |>
             left_join(as.data.frame(trees), by="treeID") |>
-            select(date,treeID,input$name,DBH) |> 
+            select(date,treeID,input$nameGrowth,DBH) |> 
+            filter(!!sym(input$nameGrowth) %in% input$speciesGrowth) |>
             group_by(treeID) |>
-            arrange(input$name,treeID,date) |>
+            arrange(!!sym(input$nameGrowth),treeID,date) |>
             mutate(dDBH=c(diff(DBH), NA),
                    dt=c(as.numeric(diff(date))/365.25,NA),
                    G=dDBH/dt)
-            #summarize mean and sd growth
     })
     
     output$vigorPlot <- renderPlot({
-        ggplot(vigorData(), aes(.data[[input$name]], n, fill=crownVigor)) +
+        ggplot(vigorData(), aes(.data[[input$nameVigor]], n, fill=crownVigor)) +
             geom_bar(position = "stack", stat = "identity", width = 0.7) +
             xlab("Species") + ylab("Trees") +
             theme_nice() + 
             theme(axis.text.x = element_text(angle=45,vjust=1,hjust=1)) +
             scale_fill_custom() + 
             guides(fill=guide_legend(title="Ratings",position="left"))
-    )}
+    })
     
     output$growthPlot <- renderPlot({
-        ggplot(growthData(), aes(DBH, G, color=.data[[input$name]])) +
-            geom_point() +
-            geom_smooth() +
-            xlab("Size") + ylab("Growth") +
-            theme_nice()
+        ggplot(growthData(), aes(.data[[input$nameGrowth]], G) +
+            geom_boxplot(na.rm=TRUE) +
+            xlab("Species") + ylab("Average Annual Growth") +
+            theme_nice() + 
+            theme(axis.text.x = element_text(angle=45,vjust=1,hjust=1))
     })
     
     output$map <- renderUI({

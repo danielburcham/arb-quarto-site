@@ -180,12 +180,12 @@ ui <- page_navbar(
                 layout_sidebar(
                     fillable = TRUE,
                     sidebar = sidebar(width = 325,
-                        selectInput('species', 'Choose species', 
+                        selectInput('speciesVigor', 'Choose species', 
                                                       choices = unique(trees$scientificName), 
                                                       selected = first(unique(trees$scientificName)),
                                                       multiple = TRUE,
                                                       selectize = TRUE), 
-                                      radioButtons('name', 'Choose name display', 
+                                      radioButtons('nameVigor', 'Choose name display', 
                                                    choiceNames = c("Scientific name", "Common name"),
                                                    choiceValues = c("scientificName","commonName"),
                                                    selected = "scientificName")),
@@ -199,12 +199,12 @@ ui <- page_navbar(
                 layout_sidebar(
                     fillable = TRUE,
                     sidebar = sidebar(width = 325,
-                        selectInput('species', 'Choose species', 
+                        selectInput('speciesGrowth', 'Choose species', 
                                                       choices = unique(trees$scientificName), 
                                                       selected = first(unique(trees$scientificName)),
                                                       multiple = TRUE,
                                                       selectize = TRUE), 
-                                      radioButtons('name', 'Choose name display', 
+                                      radioButtons('nameGrowth', 'Choose name display', 
                                                    choiceNames = c("Scientific name", "Common name"),
                                                    choiceValues = c("scientificName","commonName"),
                                                    selected = "scientificName")),
@@ -223,26 +223,26 @@ server <- function(input, output, session) {
     vigorData <- reactive({
         observations |>
             left_join(as.data.frame(trees), by="treeID") |>
-            select(date,input$name,crownVigor) |>
-            filter(max(year(date)) & (!!sym(input$name) %in% input$species)) |> 
-            group_by(!!sym(input$name),crownVigor) |>
+            select(date,input$nameVigor,crownVigor) |>
+            filter(max(year(date)) & (!!sym(input$nameVigor) %in% input$speciesVigor)) |> 
+            group_by(!!sym(input$nameVigor),crownVigor) |>
             summarize(n = n())
     })
     
     growthData <- reactive({
         observations |>
             left_join(as.data.frame(trees), by="treeID") |>
-            select(date,treeID,input$name,DBH) |> 
-            filter(!!sym(input$name) %in% input$species) |>
+            select(date,treeID,input$nameGrowth,DBH) |> 
+            filter(!!sym(input$nameGrowth) %in% input$speciesGrowth) |>
             group_by(treeID) |>
-            arrange(input$name,treeID,date) |>
+            arrange(!!sym(input$nameGrowth),treeID,date) |>
             mutate(dDBH=c(diff(DBH), NA),
                    dt=c(as.numeric(diff(date))/365.25,NA),
                    G=dDBH/dt)
     })
     
     output$vigorPlot <- renderPlot({
-        ggplot(vigorData(), aes(.data[[input$name]], n, fill=crownVigor)) +
+        ggplot(vigorData(), aes(.data[[input$nameVigor]], n, fill=crownVigor)) +
             geom_bar(position = "stack", stat = "identity", width = 0.7) +
             xlab("Species") + ylab("Trees") +
             theme_nice() + 
@@ -252,7 +252,7 @@ server <- function(input, output, session) {
     })
     
     output$growthPlot <- renderPlot({
-        ggplot(growthData(), aes(.data[[input$name]], G) +
+        ggplot(growthData(), aes(.data[[input$nameGrowth]], G) +
             geom_boxplot(na.rm=TRUE) +
             xlab("Species") + ylab("Average Annual Growth") +
             theme_nice() + 
