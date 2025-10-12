@@ -238,9 +238,7 @@ server <- function(input, output, session) {
             arrange(input$name,treeID,date) |>
             mutate(dDBH=c(diff(DBH), NA),
                    dt=c(as.numeric(diff(date))/365.25,NA),
-                   G=dDBH/dt) |>
-            group_by(!!sym(input$name)) |>
-            summarize(mean = mean(G,na.rm=TRUE), sd=sd(G,na.rm=TRUE))
+                   G=dDBH/dt)
     })
     
     output$vigorPlot <- renderPlot({
@@ -254,10 +252,11 @@ server <- function(input, output, session) {
     })
     
     output$growthPlot <- renderPlot({
-        ggplot(growthData(), aes(.data[[input$name]], mean) +
-            geom_boxplot() +
+        ggplot(growthData(), aes(.data[[input$name]], G) +
+            geom_boxplot(aes(.data[[input$name]],G),na.rm=TRUE) +
             xlab("Species") + ylab("Average Annual Growth") +
-            theme_nice()
+            theme_nice() + 
+            theme(axis.text.x = element_text(angle=45,vjust=1,hjust=1))
     })
     
     output$map <- renderUI({
