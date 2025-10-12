@@ -195,7 +195,7 @@ ui <- page_navbar(
               title = "Crown Vigor"),
     nav_panel(card(
                 full_screen = FALSE,
-                card_header("Annual growth"),
+                card_header("Growth measurements"),
                 layout_sidebar(
                     fillable = TRUE,
                     sidebar = sidebar(width = 325,
@@ -233,7 +233,7 @@ server <- function(input, output, session) {
         observations |>
             left_join(as.data.frame(trees), by="treeID") |>
             select(date,treeID,input$name,DBH) |> 
-            filter((!!sym(input$name) %in% input$species)) |>
+            filter(!!sym(input$name) %in% input$species) |>
             group_by(treeID) |>
             arrange(input$name,treeID,date) |>
             mutate(dDBH=c(diff(DBH), NA),
