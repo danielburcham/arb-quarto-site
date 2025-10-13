@@ -208,7 +208,7 @@ ui <- page_navbar(
                                                    choiceNames = c("Scientific name", "Common name"),
                                                    choiceValues = c("scientificName","commonName"),
                                                    selected = "scientificName")),
-                    plotOutput("growthPlot")
+                    #plotOutput("growthPlot")'Plot Output'
                 )
             ),
               title = "Growth"),
@@ -251,13 +251,13 @@ server <- function(input, output, session) {
             guides(fill=guide_legend(title="Ratings",position="left"))
     })
     
-    output$growthPlot <- renderPlot({
-        ggplot(growthData(), aes(.data[[input$nameGrowth]], G)) +
-            geom_boxplot(na.rm=TRUE) +
-            xlab("Species") + ylab("Average Annual Growth") +
-            theme_nice() + 
-            theme(axis.text.x = element_text(angle=45,vjust=1,hjust=1))
-    })
+ #   output$growthPlot <- renderPlot({
+ #       ggplot(growthData(), aes(.data[[input$nameGrowth]], G)) +
+ #           geom_boxplot(na.rm=TRUE) +
+ #           xlab("Species") + ylab("Average Annual Growth") +
+ #           theme_nice() + 
+ #           theme(axis.text.x = element_text(angle=45,vjust=1,hjust=1))
+ #   })
     
     output$map <- renderUI({
         HTML('<script type="module" src="https://js.arcgis.com/embeddable-components/4.31/arcgis-embeddable-components.esm.js"></script><arcgis-embedded-map style="height:100%;width:100%;" item-id="a1afdce0b8004b14a268dcec8ec5043e" theme="light" portal-url="https://csurams.maps.arcgis.com" ></arcgis-embedded-map>')
@@ -270,11 +270,11 @@ server <- function(input, output, session) {
                           selected=first(unique(as.data.frame(trees)|>select(input$nameVigor))))
     },ignoreInit=TRUE)
     
-    observeEvent(input$nameGrowth,{ 
-        updateSelectInput(session,'speciesGrowth','Choose species',
-                          choices=unique(as.data.frame(trees)|>select(input$nameGrowth)),
-                          selected=first(unique(as.data.frame(trees)|>select(input$nameGrowth))))
-    },ignoreInit=TRUE)
+    #observeEvent(input$nameGrowth,{ 
+    #    updateSelectInput(session,'speciesGrowth','Choose species',
+    #                      choices=unique(as.data.frame(trees)|>select(input$nameGrowth)),
+    #                      selected=first(unique(as.data.frame(trees)|>select(input$nameGrowth))))
+    #},ignoreInit=TRUE)
     
 }
 
