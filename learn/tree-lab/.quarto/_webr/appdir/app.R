@@ -167,19 +167,37 @@ ui <- page_navbar(
                 layout_sidebar(
                     fillable = TRUE,
                     sidebar = sidebar(width = 325,
-                        selectInput('species', 'Choose species', 
+                        selectInput('speciesVigor', 'Choose species', 
                                                       choices = unique(trees$scientificName), 
                                                       selected = first(unique(trees$scientificName)),
                                                       multiple = TRUE,
                                                       selectize = TRUE), 
-                                      radioButtons('name', 'Choose name display', 
+                                      radioButtons('nameVigor', 'Choose name display', 
                                                    choiceNames = c("Scientific name", "Common name"),
-                                                   choiceValues = c("scientificName","commonName"))),
-                    plotOutput("plot")
+                                                   choiceValues = c("scientificName","commonName"),
+                                                   selected = "scientificName")),
+                    plotOutput("vigorPlot")
                 )
             ),
               title = "Crown Vigor"),
-    nav_panel("Future observations.",
+    nav_panel(card(
+                full_screen = FALSE,
+                card_header("Growth measurements"),
+                layout_sidebar(
+                    fillable = TRUE,
+                    sidebar = sidebar(width = 325,
+                        selectInput('speciesGrowth', 'Choose species', 
+                                                      choices = unique(trees$scientificName), 
+                                                      selected = first(unique(trees$scientificName)),
+                                                      multiple = TRUE,
+                                                      selectize = TRUE), 
+                                      radioButtons('nameGrowth', 'Choose name display', 
+                                                   choiceNames = c("Scientific name", "Common name"),
+                                                   choiceValues = c("scientificName","commonName"),
+                                                   selected = "scientificName")),
+                    plotOutput("growthPlot")
+                )
+            ),
               title = "Growth"),
     nav_panel("Future observations.",
               title = "Survival"),
@@ -189,17 +207,29 @@ ui <- page_navbar(
 # Define server function
 server <- function(input, output, session) {
     
-    data <- reactive({
+    vigorData <- reactive({
         observations |>
             left_join(as.data.frame(trees), by="treeID") |>
-            select(date,input$name,crownVigor) |>
-            filter(max(year(date)) & (!!sym(input$name) %in% input$species)) |> 
-            group_by(!!sym(input$name),crownVigor) |>
+            select(date,input$nameVigor,crownVigor) |>
+            filter(max(year(date)) & (!!sym(input$nameVigor) %in% input$speciesVigor)) |> 
+            group_by(!!sym(input$nameVigor),crownVigor) |>
             summarize(n = n())
     })
     
-    output$plot <- renderPlot({
-        ggplot(data(), aes(.data[[input$name]], n, fill=crownVigor)) +
+    growthData <- reactive({
+        observations |>
+            left_join(as.data.frame(trees), by="treeID") |>
+            select(date,treeID,input$nameGrowth,DBH) |> 
+            group_by(treeID) |>
+            arrange(input$nameGrowth,treeID,date) |>
+            filter(!!sym(input$nameGrowth) %in% input$speciesGrowth) |>
+            mutate(dDBH=c(diff(DBH), NA),
+                   dt=c(as.numeric(diff(date))/365.25,NA),
+                   G=dDBH/dt)
+    })
+    
+    output$vigorPlot <- renderPlot({
+        ggplot(vigorData(), aes(.data[[input$nameVigor]], n, fill=crownVigor)) +
             geom_bar(position = "stack", stat = "identity", width = 0.7) +
             xlab("Species") + ylab("Trees") +
             theme_nice() + 
@@ -208,14 +238,29 @@ server <- function(input, output, session) {
             guides(fill=guide_legend(title="Ratings",position="left"))
     })
     
-    output$map <- renderUI({
-        tags$html(tags$head(HTML('<script type="module" src="https://js.arcgis.com/embeddable-components/4.31/arcgis-embeddable-components.esm.js"></script>')),tags$body(HTML('<arcgis-embedded-map style="height:100%;width:100%;" item-id="a1afdce0b8004b14a268dcec8ec5043e" theme="light" portal-url="https://csurams.maps.arcgis.com" ></arcgis-embedded-map>')))
+    output$growthPlot <- renderPlot({
+        ggplot(growthData(), aes(.data[[input$nameGrowth]], G)) +
+            geom_boxplot(na.rm=TRUE) +
+            xlab("Species") + ylab("Average Annual Growth") +
+            theme_nice() + 
+            theme(axis.text.x = element_text(angle=45,vjust=1,hjust=1))
     })
     
-    observeEvent(input$name,{ 
-        updateSelectInput(session,'species','Choose species',
-                          choices=unique(as.data.frame(trees)|>select(input$name)),
-                          selected=first(unique(as.data.frame(trees)|>select(input$name))))
+    output$map <- renderUI({
+        HTML('<script type="module" src="https://js.arcgis.com/embeddable-components/4.31/arcgis-embeddable-components.esm.js"></script><arcgis-embedded-map style="height:100%;width:100%;" item-id="a1afdce0b8004b14a268dcec8ec5043e" theme="light" portal-url="https://csurams.maps.arcgis.com" ></arcgis-embedded-map>')
+        
+    })
+    
+    observeEvent(input$nameVigor,{ 
+        updateSelectInput(session,'speciesVigor','Choose species',
+                          choices=unique(as.data.frame(trees)|>select(input$nameVigor)),
+                          selected=first(unique(as.data.frame(trees)|>select(input$nameVigor))))
+    },ignoreInit=TRUE)
+    
+    observeEvent(input$nameGrowth,{ 
+        updateSelectInput(session,'speciesGrowth','Choose species',
+                          choices=unique(as.data.frame(trees)|>select(input$nameGrowth)),
+                          selected=first(unique(as.data.frame(trees)|>select(input$nameGrowth))))
     },ignoreInit=TRUE)
     
 }
