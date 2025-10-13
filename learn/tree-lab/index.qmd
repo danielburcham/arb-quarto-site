@@ -208,7 +208,7 @@ ui <- page_navbar(
                                                    choiceNames = c("Scientific name", "Common name"),
                                                    choiceValues = c("scientificName","commonName"),
                                                    selected = "scientificName")),
-                    #plotOutput("growthPlot")'Plot Output'
+                    #plotOutput("growthPlot")"Plot output"
                 )
             ),
               title = "Growth"),
