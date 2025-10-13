@@ -10,7 +10,6 @@ filters:
 ```{shinylive-r}
 #| standalone: true
 #| viewerHeight: 800
-#| components: [editor, viewer]
 
 # Import and wrangle data
 library(bslib)
@@ -18,6 +17,7 @@ library(bsicons)
 library(htmltools)
 library(sf)
 library(shiny)
+library(shinylive)
 library(tidyverse)
 
 download.file("https://raw.githubusercontent.com/danielburcham/arbdatascience/refs/heads/master/Colorado_Tree_Observation_Dashboard-Trees.csv", "Colorado_Tree_Observation_Dashboard-Trees.csv")

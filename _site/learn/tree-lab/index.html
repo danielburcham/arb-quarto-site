@@ -405,8 +405,7 @@ ui &lt;- page_navbar(
                                                    choiceNames = c("Scientific name", "Common name"),
                                                    choiceValues = c("scientificName","commonName"),
                                                    selected = "scientificName")),
-                    #plotOutput("growthPlot")
-                    "Plot output"
+                    plotOutput("growthPlot")
                 )
             ),
               title = "Growth"),
@@ -427,17 +426,17 @@ server &lt;- function(input, output, session) {
             summarize(n = n())
     })
     
-#    growthData &lt;- reactive({
-#        observations |&gt;
-#            left_join(as.data.frame(trees), by="treeID") |&gt;
-#            select(date,treeID,!!sym(input$nameGrowth),DBH) |&gt; 
-#            group_by(treeID) |&gt;
-#            arrange(!!sym(input$nameGrowth),treeID,date) |&gt;
-#            filter(!!sym(input$nameGrowth) %in% input$speciesGrowth) |&gt;
-#            mutate(dDBH=c(diff(DBH), NA),
-#                   dt=c(as.numeric(diff(date))/365.25,NA),
-#                   G=dDBH/dt)
-#    })
+    growthData &lt;- reactive({
+        observations |&gt;
+            left_join(as.data.frame(trees), by="treeID") |&gt;
+            select(date,treeID,!!sym(input$nameGrowth),DBH) |&gt; 
+            group_by(treeID) |&gt;
+            arrange(!!sym(input$nameGrowth),treeID,date) |&gt;
+            filter(!!sym(input$nameGrowth) %in% input$speciesGrowth) |&gt;
+            mutate(dDBH=c(diff(DBH), NA),
+                   dt=c(as.numeric(diff(date))/365.25,NA),
+                   G=dDBH/dt)
+    })
     
     output$vigorPlot &lt;- renderPlot({
         ggplot(vigorData(), aes(.data[[input$nameVigor]], n, fill=crownVigor)) +
@@ -449,13 +448,13 @@ server &lt;- function(input, output, session) {
             guides(fill=guide_legend(title="Ratings",position="left"))
     })
     
- #   output$growthPlot &lt;- renderPlot({
- #       ggplot(growthData(), aes(.data[[input$nameGrowth]], G)) +
- #           geom_boxplot(na.rm=TRUE) +
- #           xlab("Species") + ylab("Average Annual Growth") +
- #           theme_nice() + 
- #           theme(axis.text.x = element_text(angle=45,vjust=1,hjust=1))
- #   })
+    output$growthPlot &lt;- renderPlot({
+        ggplot(growthData(), aes(.data[[input$nameGrowth]], G)) +
+            geom_boxplot(na.rm=TRUE) +
+            xlab("Species") + ylab("Average Annual Growth") +
+            theme_nice() + 
+            theme(axis.text.x = element_text(angle=45,vjust=1,hjust=1))
+    })
     
     output$map &lt;- renderUI({
         HTML('&lt;script type="module" src="https://js.arcgis.com/embeddable-components/4.31/arcgis-embeddable-components.esm.js"&gt;&lt;/script&gt;&lt;arcgis-embedded-map style="height:100%;width:100%;" item-id="a1afdce0b8004b14a268dcec8ec5043e" theme="light" portal-url="https://csurams.maps.arcgis.com" &gt;&lt;/arcgis-embedded-map&gt;')
