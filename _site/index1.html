@@ -376,12 +376,12 @@ ui &lt;- page_navbar(
                 layout_sidebar(
                     fillable = TRUE,
                     sidebar = sidebar(width = 325,
-                        selectInput('species', 'Choose species', 
+                        selectInput('speciesVigor', 'Choose species', 
                                                       choices = unique(trees$scientificName), 
                                                       selected = first(unique(trees$scientificName)),
                                                       multiple = TRUE,
                                                       selectize = TRUE), 
-                                      radioButtons('name', 'Choose name display', 
+                                      radioButtons('nameVigor', 'Choose name display', 
                                                    choiceNames = c("Scientific name", "Common name"),
                                                    choiceValues = c("scientificName","commonName"),
                                                    selected = "scientificName")),
@@ -395,12 +395,12 @@ ui &lt;- page_navbar(
                 layout_sidebar(
                     fillable = TRUE,
                     sidebar = sidebar(width = 325,
-                        selectInput('species', 'Choose species', 
+                        selectInput('speciesGrowth', 'Choose species', 
                                                       choices = unique(trees$scientificName), 
                                                       selected = first(unique(trees$scientificName)),
                                                       multiple = TRUE,
                                                       selectize = TRUE), 
-                                      radioButtons('name', 'Choose name display', 
+                                      radioButtons('nameGrowth', 'Choose name display', 
                                                    choiceNames = c("Scientific name", "Common name"),
                                                    choiceValues = c("scientificName","commonName"),
                                                    selected = "scientificName")),
@@ -419,26 +419,25 @@ server &lt;- function(input, output, session) {
     vigorData &lt;- reactive({
         observations |&gt;
             left_join(as.data.frame(trees), by="treeID") |&gt;
-            select(date,input$name,crownVigor) |&gt;
-            filter(max(year(date)) &amp; (!!sym(input$name) %in% input$species)) |&gt; 
-            group_by(!!sym(input$name),crownVigor) |&gt;
+            select(date,input$nameVigor,crownVigor) |&gt;
+            filter(max(year(date)) &amp; (!!sym(input$nameVigor) %in% input$speciesVigor)) |&gt; 
+            group_by(!!sym(input$nameVigor),crownVigor) |&gt;
             summarize(n = n())
     })
     
     growthData &lt;- reactive({
         observations |&gt;
             left_join(as.data.frame(trees), by="treeID") |&gt;
-            select(date,treeID,input$name,DBH) |&gt; 
+            select(date,treeID,input$nameGrowth,DBH) |&gt; 
             group_by(treeID) |&gt;
-            arrange(input$name,treeID,date) |&gt;
+            arrange(input$nameGrowth,treeID,date) |&gt;
             mutate(dDBH=c(diff(DBH), NA),
                    dt=c(as.numeric(diff(date))/365.25,NA),
                    G=dDBH/dt)
-            #summarize mean and sd growth
     })
     
     output$vigorPlot &lt;- renderPlot({
-        ggplot(vigorData(), aes(.data[[input$name]], n, fill=crownVigor)) +
+        ggplot(vigorData(), aes(.data[[input$nameVigor]], n, fill=crownVigor)) +
             geom_bar(position = "stack", stat = "identity", width = 0.7) +
             xlab("Species") + ylab("Trees") +
             theme_nice() + 
@@ -448,7 +447,7 @@ server &lt;- function(input, output, session) {
     })
     
     output$growthPlot &lt;- renderPlot({
-        ggplot(growthData(), aes(DBH, G, color=.data[[input$name]])) +
+        ggplot(growthData(), aes(.data[[input$nameGrowth]], G)) +
             geom_point() +
             geom_smooth() +
             xlab("Size") + ylab("Growth") +
@@ -460,10 +459,16 @@ server &lt;- function(input, output, session) {
         
     })
     
-    observeEvent(input$name,{ 
-        updateSelectInput(session,'species','Choose species',
-                          choices=unique(as.data.frame(trees)|&gt;select(input$name)),
-                          selected=first(unique(as.data.frame(trees)|&gt;select(input$name))))
+    observeEvent(input$nameVigor,{ 
+        updateSelectInput(session,'speciesVigor','Choose species',
+                          choices=unique(as.data.frame(trees)|&gt;select(input$nameVigor)),
+                          selected=first(unique(as.data.frame(trees)|&gt;select(input$nameVigor))))
+    },ignoreInit=TRUE)
+    
+    observeEvent(input$nameGrowth,{ 
+        updateSelectInput(session,'speciesGrowth','Choose species',
+                          choices=unique(as.data.frame(trees)|&gt;select(input$nameGrowth)),
+                          selected=first(unique(as.data.frame(trees)|&gt;select(input$nameGrowth))))
     },ignoreInit=TRUE)
     
 }

@@ -220,9 +220,9 @@ server <- function(input, output, session) {
         observations |>
             left_join(as.data.frame(trees), by="treeID") |>
             select(date,treeID,input$nameGrowth,DBH) |> 
-            filter(!!sym(input$nameGrowth) %in% input$speciesGrowth) |>
             group_by(treeID) |>
-            arrange(!!sym(input$nameGrowth),treeID,date) |>
+            arrange(input$nameGrowth,treeID,date) |>
+            filter(!!sym(input$nameGrowth) %in% input$speciesGrowth) |>
             mutate(dDBH=c(diff(DBH), NA),
                    dt=c(as.numeric(diff(date))/365.25,NA),
                    G=dDBH/dt)
@@ -239,7 +239,7 @@ server <- function(input, output, session) {
     })
     
     output$growthPlot <- renderPlot({
-        ggplot(growthData(), aes(.data[[input$nameGrowth]], G) +
+        ggplot(growthData(), aes(.data[[input$nameGrowth]], G)) +
             geom_boxplot(na.rm=TRUE) +
             xlab("Species") + ylab("Average Annual Growth") +
             theme_nice() + 
@@ -251,10 +251,16 @@ server <- function(input, output, session) {
         
     })
     
-    observeEvent(input$name,{ 
-        updateSelectInput(session,'species','Choose species',
-                          choices=unique(as.data.frame(trees)|>select(input$name)),
-                          selected=first(unique(as.data.frame(trees)|>select(input$name))))
+    observeEvent(input$nameVigor,{ 
+        updateSelectInput(session,'speciesVigor','Choose species',
+                          choices=unique(as.data.frame(trees)|>select(input$nameVigor)),
+                          selected=first(unique(as.data.frame(trees)|>select(input$nameVigor))))
+    },ignoreInit=TRUE)
+    
+    observeEvent(input$nameGrowth,{ 
+        updateSelectInput(session,'speciesGrowth','Choose species',
+                          choices=unique(as.data.frame(trees)|>select(input$nameGrowth)),
+                          selected=!!sym(input$nameGrowth) %in% input$speciesGrowth)
     },ignoreInit=TRUE)
     
 }
