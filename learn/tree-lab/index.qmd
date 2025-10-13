@@ -232,9 +232,9 @@ server <- function(input, output, session) {
     growthData <- reactive({
         observations |>
             left_join(as.data.frame(trees), by="treeID") |>
-            select(date,treeID,input$nameGrowth,DBH) |> 
+            select(date,treeID,!!sym(input$nameGrowth),DBH) |> 
             group_by(treeID) |>
-            arrange(input$nameGrowth,treeID,date) |>
+            arrange(!!sym(input$nameGrowth),treeID,date) |>
             filter(!!sym(input$nameGrowth) %in% input$speciesGrowth) |>
             mutate(dDBH=c(diff(DBH), NA),
                    dt=c(as.numeric(diff(date))/365.25,NA),
