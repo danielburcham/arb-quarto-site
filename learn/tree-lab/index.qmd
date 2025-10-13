@@ -233,9 +233,9 @@ server <- function(input, output, session) {
         observations |>
             left_join(as.data.frame(trees), by="treeID") |>
             select(date,treeID,input$nameGrowth,DBH) |> 
-            filter(!!sym(input$nameGrowth) %in% input$speciesGrowth) |>
             group_by(treeID) |>
             arrange(!!sym(input$nameGrowth),treeID,date) |>
+            filter(!!sym(input$nameGrowth) %in% input$speciesGrowth) |>
             mutate(dDBH=c(diff(DBH), NA),
                    dt=c(as.numeric(diff(date))/365.25,NA),
                    G=dDBH/dt)
