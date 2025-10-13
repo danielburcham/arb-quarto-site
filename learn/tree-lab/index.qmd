@@ -270,11 +270,11 @@ server <- function(input, output, session) {
                           selected=first(unique(as.data.frame(trees)|>select(input$nameVigor))))
     },ignoreInit=TRUE)
     
-    #observeEvent(input$nameGrowth,{ 
-    #    updateSelectInput(session,'speciesGrowth','Choose species',
-    #                      choices=unique(as.data.frame(trees)|>select(input$nameGrowth)),
-    #                      selected=first(unique(as.data.frame(trees)|>select(input$nameGrowth))))
-    #},ignoreInit=TRUE)
+    observeEvent(input$nameGrowth,{ 
+        updateSelectInput(session,'speciesGrowth','Choose species',
+                          choices=unique(as.data.frame(trees)|>select(input$nameGrowth)),
+                          selected=first(unique(as.data.frame(trees)|>select(input$nameGrowth))))
+    },ignoreInit=TRUE)
     
 }
 
