@@ -126,12 +126,21 @@ theme_nice <- function() {
           legend.text = element_text(size=12))
 }
 
-scale_fill_custom <- function(...){
+scale_fill_vigor <- function(...){
     ggplot2:::manual_scale(
         'fill', 
         values = setNames(c("#006144","#82C503","#CFFC00","#FFC038","#E56A54"),
                               c("Healthy","Slightly unhealthy","Moderately unhealthy",
                                  "Severely unhealthy","Dead")), 
+        ...
+    )
+}
+
+scale_fill_survival <- function(...){
+    ggplot2:::manual_scale(
+        'fill', 
+        values = setNames(c("#006144","#E56A54"),
+                              c("Alive","Dead")), 
         ...
     )
 }
@@ -152,8 +161,9 @@ ui <- page_navbar(
                                      theme = value_box_theme(bg = "#dee2e6", fg = "#000000")),
                            value_box(title = "Percent survival",
                                      value = observations |>
-                                         group_by(treeID) |>
-                                         slice_max(date, n=1) |>
+                                         group_by(treeID) |> 
+                                         filter(year(date)==max(year(date))) |>
+                                         #slice_max(date, n=1) |>
                                          (\(data) sum(data$treeStatus != "D"))() / length(trees$treeID) * 100,
                                      showcase = bsicons::bs_icon("graph-up"),
                                      showcase_layout = "top right",
@@ -204,7 +214,24 @@ ui <- page_navbar(
                 )
             ),
               title = "Growth"),
-    nav_panel("Future observations.",
+    nav_panel(card(
+                full_screen = FALSE,
+                card_header("Survival rates"),
+                layout_sidebar(
+                    fillable = TRUE,
+                    sidebar = sidebar(width = 325,
+                        selectInput('speciesSurvival', 'Choose species', 
+                                                      choices = unique(trees$scientificName), 
+                                                      selected = first(unique(trees$scientificName)),
+                                                      multiple = TRUE,
+                                                      selectize = TRUE), 
+                                      radioButtons('nameSurvival', 'Choose name display', 
+                                                   choiceNames = c("Scientific name", "Common name"),
+                                                   choiceValues = c("scientificName","commonName"),
+                                                   selected = "scientificName")),
+                    plotOutput("survivalPlot")
+                )
+            ),
               title = "Survival"),
     title = "Tree Observation Dashboard"
 )
@@ -216,7 +243,7 @@ server <- function(input, output, session) {
         observations |>
             left_join(as.data.frame(trees), by="treeID") |>
             select(date,input$nameVigor,crownVigor) |>
-            filter(max(year(date)) & (!!sym(input$nameVigor) %in% input$speciesVigor)) |> 
+            filter(year(date)==max(year(date)) & (!!sym(input$nameVigor) %in% input$speciesVigor)) |> 
             group_by(!!sym(input$nameVigor),crownVigor) |>
             summarize(n = n())
     })
@@ -233,13 +260,22 @@ server <- function(input, output, session) {
                    G=dDBH/dt)
     })
     
+    survivalData <- reactive({
+        observations |>
+            left_join(as.data.frame(trees), by="treeID") |>
+            select(date,input$nameSurvival,treeStatus) |>
+            filter(year(date)==max(year(date)) & (!!sym(input$nameSurvival) %in% input$speciesSurvival)) |>
+            group_by(!!sym(input$nameSurvival),treeStatus) |>
+            summarize(n = n())
+    })
+    
     output$vigorPlot <- renderPlot({
         ggplot(vigorData(), aes(.data[[input$nameVigor]], n, fill=crownVigor)) +
             geom_bar(position = "stack", stat = "identity", width = 0.7) +
             xlab("Species") + ylab("Trees") +
             theme_nice() + 
             theme(axis.text.x = element_text(angle=45,vjust=1,hjust=1)) +
-            scale_fill_custom() + 
+            scale_fill_vigor() + 
             guides(fill=guide_legend(title="Ratings",position="left"))
     })
     
@@ -249,6 +285,16 @@ server <- function(input, output, session) {
             xlab("Species") + ylab("Average Annual Growth") +
             theme_nice() + 
             theme(axis.text.x = element_text(angle=45,vjust=1,hjust=1))
+    })
+    
+    output$survivalPlot <- renderPlot({
+        ggplot(survivalData(), aes(.data[[input$nameSurvival]], n, fill=treeStatus)) +
+            geom_bar(position = "stack", stat = "identity", width = 0.7) +
+            xlab("Species") + ylab("Trees") +
+            theme_nice() + 
+            theme(axis.text.x = element_text(angle=45,vjust=1,hjust=1)) +
+            scale_fill_survival() + 
+            guides(fill=guide_legend(title="Ratings",position="left"))
     })
     
     output$map <- renderUI({
@@ -266,6 +312,12 @@ server <- function(input, output, session) {
         updateSelectInput(session,'speciesGrowth','Choose species',
                           choices=unique(as.data.frame(trees)|>select(input$nameGrowth)),
                           selected=first(unique(as.data.frame(trees)|>select(input$nameGrowth))))
+    },ignoreInit=TRUE)
+    
+    observeEvent(input$nameSurvival,{ 
+        updateSelectInput(session,'speciesSurvival','Choose species',
+                          choices=unique(as.data.frame(trees)|>select(input$nameSurvival)),
+                          selected=first(unique(as.data.frame(trees)|>select(input$nameSurvival))))
     },ignoreInit=TRUE)
     
 }
