@@ -206,6 +206,7 @@ gtag('config', 'G-H0H6YFRLY9', { 'anonymize_ip': true});
 #|   Please set `embed-resources: false` in your metadata.
 #| standalone: true
 #| viewerHeight: 800
+#| components: [editor, viewer]
 
 # Import and wrangle data
 library(bslib)
@@ -428,9 +429,9 @@ server &lt;- function(input, output, session) {
     growthData &lt;- reactive({
         observations |&gt;
             left_join(as.data.frame(trees), by="treeID") |&gt;
-            select(date,treeID,input$nameGrowth,DBH) |&gt; 
+            select(date,treeID,!!sym(input$nameGrowth),DBH) |&gt; 
             group_by(treeID) |&gt;
-            arrange(input$nameGrowth,treeID,date) |&gt;
+            arrange(!!sym(input$nameGrowth),treeID,date) |&gt;
             filter(!!sym(input$nameGrowth) %in% input$speciesGrowth) |&gt;
             mutate(dDBH=c(diff(DBH), NA),
                    dt=c(as.numeric(diff(date))/365.25,NA),
