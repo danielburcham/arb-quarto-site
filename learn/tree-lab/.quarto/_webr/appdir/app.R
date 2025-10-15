@@ -6,6 +6,11 @@ library(sf)
 library(shiny)
 library(tidyverse)
 
+if (FALSE) {
+    library(munsell)
+    library(systemfonts)
+}
+
 download.file("https://raw.githubusercontent.com/danielburcham/arbdatascience/refs/heads/master/Colorado_Tree_Observation_Dashboard-Trees.csv", "Colorado_Tree_Observation_Dashboard-Trees.csv")
 trees <- st_read("Colorado_Tree_Observation_Dashboard-Trees.csv", quiet = TRUE, options = c("X_POSSIBLE_NAMES=x", "Y_POSSIBLE_NAMES=y")) |> 
     select(c(2:10,13))

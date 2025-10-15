@@ -49,5 +49,11 @@
   },
   "index1.qmd": {
     "index1.html": "5915c478"
+  },
+  "learn/tree-lab/test.qmd": {
+    "test.html": "43d42bcb"
+  },
+  "learn/tree-lab/demo.qmd": {
+    "demo.html": "439d0d15"
   }
 }

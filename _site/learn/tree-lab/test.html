@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Explore our Trees – Discovery Arboretum</title>
+<title>Test Lab – Discovery Arboretum</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -40,9 +40,11 @@ ul.task-list li input[type="checkbox"] {
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../../site_libs/bootstrap/bootstrap-5e14e4c6a21f5af5a4e2216d8527e1b9.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
-<script src="../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
-<link href="../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
-<link href="../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
+<meta name="shinylive:serviceworker_dir" content="../..">
+<script src="../../site_libs/quarto-contrib/shinylive-0.9.1/shinylive/load-shinylive-sw.js" type="module"></script>
+<script src="../../site_libs/quarto-contrib/shinylive-0.9.1/shinylive/run-python-blocks.js" type="module"></script>
+<link href="../../site_libs/quarto-contrib/shinylive-0.9.1/shinylive/shinylive.css" rel="stylesheet">
+<link href="../../site_libs/quarto-contrib/shinylive-quarto-css/shinylive-quarto.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -80,12 +82,9 @@ gtag('config', 'G-H0H6YFRLY9', { 'anonymize_ip': true});
 </script>
 
 
-<meta property="og:title" content="Explore our Trees – Discovery Arboretum">
-<meta property="og:description" content="">
-<meta property="og:image" content="https://www.colostate.edu/discovery-arb/learn/explore-our-trees/DSCF7464.jpeg">
+<meta property="og:title" content="Test Lab – Discovery Arboretum">
 <meta property="og:site_name" content="Discovery Arboretum">
 <meta property="og:locale" content="en_US">
-<meta property="og:image:alt" content="The leaves on a tuliptree (Liriodendron tulipifera) have a distinct broad notch at the top.">
 </head>
 
 <body class="nav-fixed fullcontent quarto-light">
@@ -184,7 +183,7 @@ gtag('config', 'G-H0H6YFRLY9', { 'anonymize_ip': true});
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Explore our Trees</h1>
+<h1 class="title">Test Lab</h1>
 </div>
 
 
@@ -201,70 +200,64 @@ gtag('config', 'G-H0H6YFRLY9', { 'anonymize_ip': true});
 </header>
 
 
-<div class="quarto-layout-panel" data-layout-ncol="3">
-<div class="quarto-layout-row">
-<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: flex-start;">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><a href="DSCF7464.jpeg" class="lightbox" data-gallery="gallery" title="The leaves on a tuliptree (Liriodendron tulipifera) have a distinct broad notch at the top."><img src="DSCF7464.jpeg" class="img-fluid figure-img" alt="The leaves on a tuliptree (Liriodendron tulipifera) have a distinct broad notch at the top."></a></p>
-<figcaption>The leaves on a tuliptree (<em>Liriodendron tulipifera</em>) have a distinct broad notch at the top.</figcaption>
-</figure>
+<div class="column-page">
+<pre class="shinylive-r" data-engine="r"><code>#| '!! shinylive warning !!': |
+#|   shinylive does not work in self-contained HTML documents.
+#|   Please set `embed-resources: false` in your metadata.
+#| standalone: true
+#| viewerHeight: 800
+
+library(bslib)
+library(bsicons)
+library(shiny)
+library(tidyverse)
+
+if (FALSE) {
+    library(munsell)
+    library(systemfonts)
+}
+
+# Define user interface
+ui &lt;- page_navbar(
+    nav_panel(
+        page_fillable(
+            layout_columns(value_box(title = "Trees observed",
+                                     value = 27,
+                                     showcase = bsicons::bs_icon("tree-fill"),
+                                     showcase_layout = "top right",
+                                     theme = value_box_theme(bg = "#dee2e6", fg = "#000000")),
+                           value_box(title = "Taxa observed",
+                                     value = 13,
+                                     showcase = bsicons::bs_icon("tree"),
+                                     showcase_layout = "top right",
+                                     theme = value_box_theme(bg = "#dee2e6", fg = "#000000")),
+                           value_box(title = "Percent survival",
+                                     value = 100,
+                                     showcase = bsicons::bs_icon("graph-up"),
+                                     showcase_layout = "top right",
+                                     theme = value_box_theme(bg = "#dee2e6", fg = "#000000")),
+                           col_widths = c(4,4,4),
+                           max_height = "150px"
+            )),
+            title = "Overview"),
+    nav_panel("Future observations.",
+              title = "Vigor"),
+    nav_panel("Future observations.",
+              title = "Growth"),
+    nav_panel("Future observations.",
+              title = "Survival"),
+    title = "Tree Observation Dashboard"
+)
+
+# Define server function
+server &lt;- function(input, output, session) {
+}
+
+# Create Shiny app
+shinyApp(ui, server)</code></pre>
 </div>
-</div>
-<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: flex-start;">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><a href="DSCF6392.jpeg" class="lightbox" data-gallery="gallery" title="Oustanding shades of orange and red fall color on a sugar maple (Acer saccharum ‘Bonfire’)."><img src="DSCF6392.jpeg" class="img-fluid figure-img" alt="Oustanding shades of orange and red fall color on a sugar maple (Acer saccharum ‘Bonfire’)."></a></p>
-<figcaption>Oustanding shades of orange and red fall color on a sugar maple (<em>Acer saccharum</em> ‘Bonfire’).</figcaption>
-</figure>
-</div>
-</div>
-<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: flex-start;">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><a href="DSCF7466.jpeg" class="lightbox" data-gallery="gallery" title="To some, the heart-shaped leaves of katsuratree (Cercidiphyllum japonicum) smell like cotton candy in the fall."><img src="DSCF7466.jpeg" class="img-fluid figure-img" alt="To some, the heart-shaped leaves of katsuratree (Cercidiphyllum japonicum) smell like cotton candy in the fall."></a></p>
-<figcaption>To some, the heart-shaped leaves of katsuratree (<em>Cercidiphyllum japonicum</em>) smell like cotton candy in the fall.</figcaption>
-</figure>
-</div>
-</div>
-</div>
-</div>
-<section id="tree-explorer-map" class="level2 page-columns page-full">
-<h2 class="anchored" data-anchor-id="tree-explorer-map">Tree Explorer Map</h2>
-<p>Using our interactive map, you can easily explore the arboretum’s tree collection through our updated records. With the search bar, you can look up plants by their names or accession numbers, and you can find more detailed information about each plant by clicking on the green markers. On the bottom of the page, you can quickly compare details about multiple trees in the expandable table.</p>
-<div class="column-page-inset">
-<style>.embed-container {position: relative; padding-bottom: 80%; height: 0; max-width: 100%;} .embed-container iframe, .embed-container object, .embed-container iframe{position: absolute; top: 0; left: 0; width: 100%; height: 100%;} small{position: absolute; z-index: 40; bottom: 0; margin-bottom: -15px;}</style><div class="embed-container"><iframe height="900" frameborder="0" scrolling="yes" marginheight="0" marginwidth="0" src="//arcg.is/1yzvz00"></iframe></div>
-</div>
-<p><a href="../..\learn/explore-our-trees/map/">Full screen version</a></p>
-</section>
-<section id="labels" class="level2">
-<h2 class="anchored" data-anchor-id="labels">Labels</h2>
-<p>You may notice that many of our plants are labeled in the arboretum. The labels contain essential information about each plant, and they’re formatted consistently with the same information arranged from top to bottom.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><a href="DSCF7510.jpeg" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Accession label on one Rocky Mountain juniper (Juniperus scopulorum ‘Toleson’s Weeping’)."><img src="DSCF7510.jpeg" class="img-fluid figure-img" style="width:50.0%" alt="Accession label on one Rocky Mountain juniper (Juniperus scopulorum ‘Toleson’s Weeping’)."></a></p>
-<figcaption>Accession label on one Rocky Mountain juniper (<em>Juniperus scopulorum</em> ‘Toleson’s Weeping’).</figcaption>
-</figure>
-</div>
-<section id="common-name" class="level4">
-<h4 class="anchored" data-anchor-id="common-name">Common name</h4>
-<p>The common name is the most widely recognized name of a species. Although familiar to many, common names are not always reliable because people living in different regions may use different names for the same species.</p>
-</section>
-<section id="scientific-name" class="level4">
-<h4 class="anchored" data-anchor-id="scientific-name">Scientific name</h4>
-<p>The scientific name is the official species name recognized anywhere in the world, and it consists of two parts representing different levels of classification: the genus and specific epithet. The entire scientific name is always italicized with the first letter of the genus capitalized. The scientific name may also contain a more detailed botanical classification, such as a subspecies (ssp.) or form (f.), or a cultivar name (shortened from cultivated variety) in single quotes at the end. The cultivar name is often given to plant varieties with noteworthy characteristics, such as color, size, or habit.</p>
-</section>
-<section id="botanical-family" class="level4">
-<h4 class="anchored" data-anchor-id="botanical-family">Botanical family</h4>
-<p>The botanical family is a broader classification containing many related members all descending from a common ancestor. For example, maples (<em>Acer</em> spp.) and buckeyes (<em>Aesculus</em> spp.) are both members of the Soapberry Family, Sapindaceae.</p>
-</section>
-<section id="accession-number" class="level4">
-<h4 class="anchored" data-anchor-id="accession-number">Accession number</h4>
-<p>The accession number assigned to each tree is a unique identifier used for tracking and monitoring. The first four digits show the year the tree was received, and the subsequent numbers show the order in which the tree was received the same year. If present, letters denote multiples of the same type of plant. For example, the accession label above indicates the tree was the 192nd plant acquired in 1978, and it was part of a larger group of the same variety.</p>
 
 
-</section>
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -684,38 +677,6 @@ gtag('config', 'G-H0H6YFRLY9', { 'anonymize_ip': true});
 </div>
   </div>
 </footer>
-<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
-(function() {
-  let previousOnload = window.onload;
-  window.onload = () => {
-    if (previousOnload) {
-      previousOnload();
-    }
-    lightboxQuarto.on('slide_before_load', (data) => {
-      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
-      const href = trigger.getAttribute('href');
-      if (href !== null) {
-        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
-        if (imgEl !== null) {
-          const srcAttr = imgEl.getAttribute("src");
-          if (srcAttr && srcAttr.startsWith("data:")) {
-            slideConfig.href = srcAttr;
-          }
-        }
-      } 
-    });
-  
-    lightboxQuarto.on('slide_after_load', (data) => {
-      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
-      if (window.Quarto?.typesetMath) {
-        window.Quarto.typesetMath(slideNode);
-      }
-    });
-  
-  };
-  
-})();
-          </script>
 
 
 
