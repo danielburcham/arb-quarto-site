@@ -202,14 +202,17 @@ ui <- page_navbar(
                     fillable = TRUE,
                     sidebar = sidebar(width = 325,
                         selectInput('speciesGrowth', 'Choose species', 
-                                                      choices = unique(trees$scientificName), 
-                                                      selected = first(unique(trees$scientificName)),
-                                                      multiple = TRUE,
-                                                      selectize = TRUE), 
-                                      radioButtons('nameGrowth', 'Choose name display', 
-                                                   choiceNames = c("Scientific name", "Common name"),
-                                                   choiceValues = c("scientificName","commonName"),
-                                                   selected = "scientificName")),
+                                    choices = unique(trees$scientificName), 
+                                    selected = first(unique(trees$scientificName)),
+                                        multiple = TRUE, selectize = TRUE),
+                        radioButtons('nameGrowth', 'Choose name display', 
+                                     choiceNames = c("Scientific name", "Common name"),
+                                     choiceValues = c("scientificName","commonName"),
+                                     selected = "scientificName"),
+                        radioButtons('growthDimension', 'Choose growth measurement',
+                                     choiceNames = c("Diameter", "Height"),
+                                     choiceValues = c("DBH", "height"),
+                                     selected = "DBH")),
                     plotOutput("growthPlot")
                 )
             ),
@@ -251,13 +254,13 @@ server <- function(input, output, session) {
     growthData <- reactive({
         observations |>
             left_join(as.data.frame(trees), by="treeID") |>
-            select(date,treeID,!!sym(input$nameGrowth),DBH) |> 
+            select(date,treeID,!!sym(input$nameGrowth),!!sym(input$growthDimension)) |> 
             group_by(treeID) |>
             arrange(!!sym(input$nameGrowth),treeID,date) |>
             filter(!!sym(input$nameGrowth) %in% input$speciesGrowth) |>
-            mutate(dDBH=c(diff(DBH), NA),
+            mutate(dSize=c(diff(!!sym(input$growthDimension)), NA),
                    dt=c(as.numeric(diff(date))/365.25,NA),
-                   G=dDBH/dt)
+                   G=dSize/dt)
     })
     
     survivalData <- reactive({
@@ -289,8 +292,8 @@ server <- function(input, output, session) {
     
     output$survivalPlot <- renderPlot({
         ggplot(survivalData(), aes(.data[[input$nameSurvival]], n, fill=treeStatus)) +
-            geom_bar(position = "stack", stat = "identity", width = 0.7) +
-            xlab("Species") + ylab("Trees") +
+            geom_bar(position = "fill", stat = "identity", width = 0.7) +
+            xlab("Species") + ylab("Percent Survival") +
             theme_nice() + 
             theme(axis.text.x = element_text(angle=45,vjust=1,hjust=1)) +
             scale_fill_survival() + 
