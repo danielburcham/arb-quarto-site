@@ -210,7 +210,7 @@ ui <- page_navbar(
                                      choiceValues = c("scientificName","commonName"),
                                      selected = "scientificName"),
                         radioButtons('growthDimension', 'Choose growth measurement',
-                                     choiceNames = c("Diameter", "Height"),
+                                     choiceNames = c("Diameter (in)", "Height (ft)"),
                                      choiceValues = c("DBH", "height"),
                                      selected = "DBH")),
                     plotOutput("growthPlot")
@@ -284,7 +284,7 @@ server <- function(input, output, session) {
     
     output$growthPlot <- renderPlot({
         ggplot(growthData(), aes(.data[[input$nameGrowth]], G)) +
-            geom_boxplot(na.rm=TRUE) +
+            geom_boxplot(na.rm=TRUE, fill="#82C503") +
             xlab("Species") + ylab("Average Annual Growth") +
             theme_nice() + 
             theme(axis.text.x = element_text(angle=45,vjust=1,hjust=1))
