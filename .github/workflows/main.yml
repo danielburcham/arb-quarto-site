@@ -29,8 +29,10 @@ jobs:
             any::sf
             any::tidyverse
 
-      - name: "Setup Quarto"
-        uses: quarto-dev/quarto-actions/setup@v2
+        - name: "Setup Quarto"
+          uses: quarto-dev/quarto-actions/setup@v2
+          with:
+            version: "1.6.40"     # replace with your local quarto --version
 
       - name: Create .ssh directory
         run: mkdir ~/.ssh && chmod 700 ~/.ssh
