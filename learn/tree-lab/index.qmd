@@ -2,6 +2,7 @@
 title: "Tree Lab"
 format: 
     html
+engine: knitr
 filters: 
     - shinylive
 ---
