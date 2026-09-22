@@ -31,8 +31,6 @@ jobs:
 
       - name: "Setup Quarto"
         uses: quarto-dev/quarto-actions/setup@v2
-        with:
-          version: "1.9.37"
 
       - name: Create .ssh directory
         run: mkdir ~/.ssh && chmod 700 ~/.ssh

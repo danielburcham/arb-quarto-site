@@ -1,7 +1,6 @@
 ---
 title: "Tree Lab"
-format: 
-    html
+format: html
 engine: knitr
 filters: 
     - shinylive
