@@ -29,10 +29,10 @@ jobs:
             any::sf
             any::tidyverse
 
-        - name: "Setup Quarto"
-          uses: quarto-dev/quarto-actions/setup@v2
-          with:
-            version: "1.6.40"     # replace with your local quarto --version
+      - name: "Setup Quarto"
+        uses: quarto-dev/quarto-actions/setup@v2
+        with:
+          version: "REPLACE_WITH_YOUR_LOCAL_QUARTO_VERSION"
 
       - name: Create .ssh directory
         run: mkdir ~/.ssh && chmod 700 ~/.ssh
@@ -46,7 +46,6 @@ jobs:
       - name: Render site
         uses: quarto-dev/quarto-actions/render@v2
 
-      # --- NEW: join the tailnet for the duration of this job ---
       - name: Connect to Tailscale
         uses: tailscale/github-action@v3
         with:
@@ -54,6 +53,5 @@ jobs:
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
           tags: tag:ci
 
-      # --- CHANGED: rsync now targets the tailnet IP, not 137.184.5.79 ---
       - name: Deploy site
         run: rsync -a -e "ssh -i ~/.ssh/id_ed25519_deploy" _site deploy@100.69.237.87:/home/deploy/arb-quarto-site
